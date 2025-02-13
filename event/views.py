@@ -7,8 +7,8 @@ def test_view(request):
     return render(request, 'dashboard.html')
 
 def dashboard(request):
-    type = request.GET.get('type')
-    print(type)
+    # type = request.GET.get('type')
+    # print(type)
     events = Event.objects.all()
     total_participants = Participant.objects.all().count()
     total_events = events.count()
