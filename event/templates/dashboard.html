@@ -1,25 +1,26 @@
 {% extends "header.html" %}
+{% load static %}
 {% block content %}
     <section class="grid lg:grid-cols-5 md:grid-cols-2 sm:grid-cols-1 gap-5 py-10">
         <div class="flex gap-2 p-5 bg-blue-100 shadow-md text-2xl font-semibold rounded-md">
             <div><i class="fa-regular fa-calendar-days"></i></div>
-            <h4>Total Participants:</h4>
+            <h4>Total Participants: {{total_participants}}</h4>
         </div>
         <div class="flex gap-2 p-5 bg-blue-100 shadow-md text-2xl font-semibold rounded-md">
             <div><i class="fa-regular fa-calendar-days"></i></div>
-            <h4>Total Events:</h4>
+            <h4>Total Events: {{total_events}}</h4>
         </div>
         <div class="flex gap-2 p-5 bg-blue-100 shadow-md text-2xl font-semibold rounded-md">
             <div><i class="fa-regular fa-calendar-days"></i></div>
-            <h4>Upcoming Events:</h4>
+            <h4>Upcoming Events: {{upcoming_events}}</h4>
         </div>
         <div class="flex gap-2 p-5 bg-blue-100 shadow-md text-2xl font-semibold rounded-md">
             <div><i class="fa-regular fa-calendar-days"></i></div>
-            <h4>Todays Events:</h4>
+            <h4>Todays Events: {{today_events}}</h4>
         </div>
         <div class="flex gap-2 p-5 bg-blue-100 shadow-md text-2xl font-semibold rounded-md">
             <div><i class="fa-regular fa-calendar-days"></i></div>
-            <h4>Past Events:</h4>
+            <h4>Past Events: {{past_events}}</h4>
         </div>
         
     </section>

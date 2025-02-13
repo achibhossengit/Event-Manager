@@ -1,38 +1,18 @@
 <section>
-    <h2 class="text-2xl font-bold py-5">Event List :</h2>
-    <div class="grid grid-cols-2 gap-6">
-        {% comment %} event-1 {% endcomment %}
-        <div class="bg-blue-100 shadow-sm rounded-md p-5">
-            <h3 class="text-2xl font-bold">Chiness Food Festival 2025</h3>
-            <p>descriptions:short form Lorem ipsum dolor sit amet consectetur adipisicing elit. Quo excepturi voluptatibus magnam quasi! Rerum, pariatur?</p>
-            <div class="flex gap-5 items-center">
-                <p>Catagory: </p>
-                <p>Date: </p>
-                <p>Locations: </p>
-                <button class="bg-green-600 px-5 py-2 rounded-md">Show Details</button>
+    <h2 class="text-2xl text-center font-bold py-5">Event List :</h2>
+    <div class="grid grid-cols-2 gap-16 w-2/3 mx-auto">
+        {% for event in events %}
+            {% comment %} event-1 {% endcomment %}
+            <div class="bg-blue-100 shadow-sm rounded-md p-5">
+                <h3 class="text-2xl font-bold">{{event.name}}</h3>
+                <p> {{event.description}} </p>
+                <div class="flex gap-5 items-center">
+                    <p>Catagory: {{event.catagory}} </p>
+                    <p>Date: {{event.date}} </p>
+                    <p>Locations: {{event.location}} </p>
+                </div>
+                <button class="mt-5 bg-green-600 px-5 py-2 rounded-md">Show Details</button>
             </div>
-        </div>
-        {% comment %} event -2 {% endcomment %}
-        <div class="bg-blue-100 shadow-sm rounded-md p-5">
-            <h3 class="text-2xl font-bold">Chiness Food Festival 2025</h3>
-            <p>descriptions:short form Lorem ipsum dolor sit amet consectetur adipisicing elit. Quo excepturi voluptatibus magnam quasi! Rerum, pariatur?</p>
-            <div class="flex gap-5 items-center">
-                <p>Catagory: </p>
-                <p>Date: </p>
-                <p>Locations: </p>
-                <button class="bg-green-600 px-5 py-2 rounded-md">Show Details</button>
-            </div>
-        </div>
-        {% comment %} event-3 {% endcomment %}
-        <div class="bg-blue-100 shadow-sm rounded-md p-5">
-            <h3 class="text-2xl font-bold">Chiness Food Festival 2025</h3>
-            <p>descriptions:short form Lorem ipsum dolor sit amet consectetur adipisicing elit. Quo excepturi voluptatibus magnam quasi! Rerum, pariatur?</p>
-            <div class="flex gap-5 items-center">
-                <p>Catagory: </p>
-                <p>Date: </p>
-                <p>Locations: </p>
-                <button class="bg-green-600 px-5 py-2 rounded-md">Show Details</button>
-            </div>
-        </div>
+        {% endfor %}
     </div>
 </section>
