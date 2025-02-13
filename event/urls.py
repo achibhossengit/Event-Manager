@@ -1,6 +1,6 @@
 from django.urls import path, include
-from event.views import test_file
+from event.views import create_event
 
 urlpatterns = [
-    path('test-file/', test_file),
+    path('create-event', create_event, name='event_creations')
 ]

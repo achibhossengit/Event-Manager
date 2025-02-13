@@ -1,4 +1,13 @@
-from django.shortcuts import render, HttpResponse
+from django.shortcuts import render, HttpResponse, redirect
+from event.forms import EventModelForm
 
-def test_file(request):
-    return HttpResponse('hello coder i am here to solve your problem!')
+def create_event(request):
+    if request.method == 'POST':
+        form = EventModelForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('event_creations')
+    else:
+        form = EventModelForm()
+
+    return render(request, 'create_event.html', {'form': form})
