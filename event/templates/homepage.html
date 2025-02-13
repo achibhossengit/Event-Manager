@@ -1,0 +1,13 @@
+{% extends "header.html" %}
+{% block content %}
+    <section>
+        <img class="w-full" src="../../static/images/event-details-1.jpg" alt="">
+    </section>
+    <section class="w-1/2 mx-auto py-5">
+        <form action="">
+            <input class="border py-2 px- rounded-md border-green-600" type="text">
+            <button class="bg-green-600 px-5 py-2 rounded-md" type="submit">Search</button>    
+        </form>
+    </section>
+    {% include "event_list.html" %}
+{% endblock content %}
