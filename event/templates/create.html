@@ -1,0 +1,24 @@
+{% extends "header.html" %}
+{% block content %}
+    <section>
+        {% if messages %}
+            {% for message in messages %}
+                <p class="text-2xl text-center font-semibold">{{message}}</p>
+            {% endfor %}
+        {% endif %}
+    </section>
+    <section class="w-1/2 mx-auto shadow-md p-5 ">
+        <form action="" method="POST">
+            {% if event_form %}
+                    {{event_form.as_p}}
+            {% elif category_form %}
+                    {{category_form.as_p}}
+            {% elif participant_form %}
+                {{participant_form.as_p}}
+            {% endif %}
+
+            {% csrf_token %}
+            <button type="submit" class="mt-5 bg-green-600 px-5 py-2 rounded-md text-white font-semibold"><i class="fa-solid fa-clipboard"></i> Submit</button>
+        </form>
+    </section>
+{% endblock content %}

@@ -1,0 +1,121 @@
+{% extends "header.html" %}
+{% block content %}
+    <section class="pt-5">
+        {% if messages %}
+            {% for message in messages %}
+                {% if message.tags == "success" %}
+                    <p class="text-2xl font-semibold text-center text-green-500">{{message}}</p>
+                {% elif message.tags == "error" %}
+                    <p class="text-2xl font-semibold text-center text-red-500">{{message}}</p>
+                {% endif %}
+            {% endfor %}
+        {% endif %}
+    </section>
+    <section class="flex justify-around py-5">
+        <div>
+            <h2 class="text-2xl text-gray-600 font-bold text-center py-5">Events</h2>
+            <table class="px-5 border border-gray-200 rounded-lg shadow-md">
+                <thead>
+                    <tr class="bg-gray-100 text-gray-600">
+                        <th class="px-6 py-3 text-left text-sm font-semibold">Sl</th>
+                        <th class="px-6 py-3 text-left text-sm font-semibold">ID</th>
+                        <th class="px-6 py-3 text-left text-sm font-semibold">Name</th>
+                        <th class="px-6 py-3 text-left text-sm font-semibold">Date</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for event in events %}
+                        <tr>
+                            <td class="px-6 py-3 text-sm text-gray-700">{{ forloop.counter }}</td>
+                            <td class="px-6 py-3 text-sm text-gray-700">{{ event.id }}</td>
+                            <td class="px-6 py-3 text-sm text-gray-700">{{ event.name }}</td>
+                            <td class="px-6 py-3 text-sm text-gray-700">{{ event.date }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            <div>
+                <a href="{% url 'create-event' %}" class="mt-5 block w-full text-center bg-green-600 px-5 py-2 rounded-md text-white font-semibold"><i class="fa-solid fa-plus"></i> Create New Event</a>
+                <form action="{% url 'delete-event' %}" method='POST' class="flex justify-between">
+                    {% csrf_token %}
+                    <input class="w-2/3 p-2 mt-5 rounded-md border border-gray-400" placeholder="Enter Event ID to Delete" type="number" name="event_id" id="">
+                    <button type="submit" name="action" value="delete" class="mt-5 bg-red-500 px-5 py-2 rounded-md text-white font-semibold"><i class="fa-solid fa-trash"></i> Delete</button>
+                </form>
+                <form action="{% url 'update-event' %}" class="flex justify-between">
+                    <input class="w-2/3 p-2 mt-5 rounded-md border border-gray-400" placeholder="Enter Event ID to Update" type="number" name="event_id" id="">
+                    <button type="submit" name="action" value="update" class="mt-5 bg-green-600 px-5 py-2 rounded-md text-white font-semibold"><i class="fa-solid fa-pen-nib"></i> Update</button>
+                </form>
+            </div>
+        </div>
+        <div>
+            <h2 class="text-2xl text-gray-600 font-bold text-center py-5">Categories</h2>
+            <table class="px-5 border border-gray-200 rounded-lg shadow-md">
+                <thead>
+                    <tr class="bg-gray-100 text-gray-600">
+                        <th class="px-6 py-3 text-left text-sm font-semibold">Sl</th>
+                        <th class="px-6 py-3 text-left text-sm font-semibold">ID</th>
+                        <th class="px-6 py-3 text-left text-sm font-semibold">Name</th>
+                        <th class="px-6 py-3 text-left text-sm font-semibold">Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for category in categories %}
+                        <tr>
+                            <td class="px-6 py-3 text-sm text-gray-700">{{ forloop.counter }}</td>
+                            <td class="px-6 py-3 text-sm text-gray-700">{{ category.id }}</td>
+                            <td class="px-6 py-3 text-sm text-gray-700">{{ category.name }}</td>
+                            <td class="px-6 py-3 text-sm text-gray-700">{{ category.description }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            <div>
+                <a href="{% url 'create-category' %}" class="mt-5 block text-center bg-green-600 px-5 py-2 rounded-md text-white font-semibold"><i class="fa-solid fa-plus"></i> Create New Category</a>
+                <form action="{% url 'delete-category' %}" method='POST' class="flex justify-between">
+                    {% csrf_token %}
+                    <input class="w-2/3 p-2 mt-5 rounded-md border border-gray-400" placeholder="Enter Category ID to Delete" type="number" name="category_id" id="">
+                    <button type="submit" name="action" value="delete" class="mt-5 bg-red-500 px-5 py-2 rounded-md text-white font-semibold"><i class="fa-solid fa-trash"></i> Delete</button>
+                </form>
+                <form action="{% url "update-category" %}" class="flex justify-between">
+                    <input class="w-2/3 p-2 mt-5 rounded-md border border-gray-400" placeholder="Enter Category ID to Update" type="number" name="category_id" id="">
+                    <button type="submit" name="action" value="update" class="mt-5 bg-green-600 px-5 py-2 rounded-md text-white font-semibold"><i class="fa-solid fa-pen-nib"></i> Update</button>
+                </form>
+            </div>
+        </div>
+        <div>
+            <h2 class="text-2xl text-gray-600 font-bold text-center py-5">Participants</h2>
+            <table class="px-5 border border-gray-200 rounded-lg shadow-md">
+                <thead>
+                    <tr class="bg-gray-100 text-gray-600">
+                        <th class="px-6 py-3 text-left text-sm font-semibold">Sl</th>
+                        <th class="px-6 py-3 text-left text-sm font-semibold">ID</th>
+                        <th class="px-6 py-3 text-left text-sm font-semibold">Name</th>
+                        <th class="px-6 py-3 text-left text-sm font-semibold">Email</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for participant in participants %}
+                        <tr>
+                            <td class="px-6 py-3 text-sm text-gray-700">{{ forloop.counter }}</td>
+                            <td class="px-6 py-3 text-sm text-gray-700">{{ participant.id }}</td>
+                            <td class="px-6 py-3 text-sm text-gray-700">{{ participant.name }}</td>
+                            <td class="px-6 py-3 text-sm text-gray-700">{{ participant.email }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            <div>
+                <a href="{% url 'create-participant' %}" class="block text-center mt-5 bg-green-600 px-5 py-2 rounded-md text-white font-semibold"><i class="fa-solid fa-plus"></i> Add New Participant</a>
+                <form action="{% url 'delete-participant' %}" method='POST' class="flex justify-between">
+                    {% csrf_token %}
+                    <input class="w-2/3 p-2 mt-5 rounded-md border border-gray-400" placeholder="Enter Category ID to Delete" type="number" name="participant_id" id="">
+                    <button type="submit" name="action" value="delete" class="mt-5 bg-red-500 px-5 py-2 rounded-md text-white font-semibold"><i class="fa-solid fa-trash"></i> Remove</button>
+                </form>
+                <form action="{% url "update-participant" %}" class="flex justify-between">
+                    <input class="w-2/3 p-2 mt-5 rounded-md border border-gray-400" placeholder="Enter Category ID to Update" type="number" name="participant_id" id="">
+                    <button type="submit" name="action" value="update" class="mt-5 bg-green-600 px-5 py-2 rounded-md text-white font-semibold"><i class="fa-solid fa-pen-nib"></i> Update</button>
+                </form>
+            </div>
+        </div>
+    </section>
+{% endblock content %}

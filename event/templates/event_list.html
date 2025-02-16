@@ -1,5 +1,5 @@
 <section>
-    <h2 class="text-2xl text-center font-bold py-5">Event List :</h2>
+    <h2 class="text-2xl text-center font-bold py-5 underline"> {{section_title}} </h2>
     <div class="grid grid-cols-2 gap-16 w-2/3 mx-auto">
         {% for event in events %}
             {% comment %} event-1 {% endcomment %}
@@ -11,7 +11,10 @@
                     <p>Date: {{event.date}} </p>
                     <p>Locations: {{event.location}} </p>
                 </div>
-                <button class="mt-5 bg-green-600 px-5 py-2 rounded-md">Show Details</button>
+                <form action="{% url 'event_details' event.id %}" method='POST'>
+                    {% csrf_token %}
+                    <button type="submit" class="mt-5 bg-green-600 px-5 py-2 rounded-md">Show Details</button>
+                </form>
             </div>
         {% endfor %}
     </div>
