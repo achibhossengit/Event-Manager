@@ -33,7 +33,7 @@ class StyledFormMixin:
             elif isinstance(field.widget, forms.Select):
                 # print('inside select widget')
                 field.widget.attrs.update({
-                    'class':f'text-2xl bg-green-400 font-bold',
+                    'class':f'text-2xl bg-green-500 font-bold',
                 })
             
             
