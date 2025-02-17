@@ -5,7 +5,6 @@ from event.models import Event, Category, Participant
 class StyledFormMixin:
     default_classes = 'border-2 bg-gray-200 rounded-lg p-3'
     def apply_default_classes(self):
-        print('inside apply default function')
         for field_name, field in self.fields.items():
             if isinstance(field.widget, forms.TextInput) or isinstance(field.widget, forms.EmailInput):
                 field.widget.attrs.update({
@@ -28,7 +27,7 @@ class StyledFormMixin:
                 })
             elif isinstance(field.widget, forms.Select):
                 field.widget.attrs.update({
-                    'class':f'text-2xl bg-green-500 font-bold',
+                    'class':f'{self.default_classes} mt-3',
                 })
             
             

@@ -1,12 +1,5 @@
 {% extends "header.html" %}
 {% block content %}
-    <section>
-        {% if messages %}
-            {% for message in messages %}
-                <p class="text-2xl text-center font-semibold">{{message}}</p>
-            {% endfor %}
-        {% endif %}
-    </section>
     <section class="w-1/2 mx-auto shadow-md p-5 ">
         <form action="" method="POST">
             {% if event_form %}

@@ -184,7 +184,7 @@ def delete_participant(request):
         try:
             participant = Participant.objects.get(id=participant_id)
             participant.delete()
-            messages.success(request, "Participant remove successfully!")
+            messages.success(request, "Participant removed successfully!")
             return redirect('management')
         except:
             messages.error(request, "Invalid ID!")
