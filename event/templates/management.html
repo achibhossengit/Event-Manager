@@ -64,7 +64,7 @@
                             <td class="px-6 py-3 text-sm text-gray-700">{{ forloop.counter }}</td>
                             <td class="px-6 py-3 text-sm text-gray-700">{{ category.id }}</td>
                             <td class="px-6 py-3 text-sm text-gray-700">{{ category.name }}</td>
-                            <td class="px-6 py-3 text-sm text-gray-700">{{ category.description }}</td>
+                            <td class="px-6 py-3 text-sm text-gray-700">{{ category.description|slice:":10"}}...</td>
                         </tr>
                     {% endfor %}
                 </tbody>
