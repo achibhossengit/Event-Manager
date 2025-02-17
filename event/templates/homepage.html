@@ -1,13 +1,19 @@
 {% extends "header.html" %}
+{% load static %}
 {% block content %}
     <section>
-        <img class="w-full" src="../../static/images/event-details-1.jpg" alt="">
+        <div>
+            <img class="w-full h-80" src="../../static/images/banner.webp" alt="">
+        </div>
+        <div class="flex justify-center mt-5">
+            <form action="" method="POST" class="">
+                {% csrf_token %}
+                <input type="text" name="keyword" id="" placeholder="Search by keyword" class="p-2 border-2 border-gray-300 rounded-md">
+                <button type="submit" class="bg-green-600 px-5 py-2 rounded-md text-white font-semibold"><i class="fa-solid fa-magnifying-glass"></i> SEARCH NOW</button>
+            </form>
+        </div>
+        <div>
+            {% include "event_list.html" %}
+        </div>
     </section>
-    <section class="w-1/2 mx-auto py-5">
-        <form action="">
-            <input class="border py-2 px- rounded-md border-green-600" type="text">
-            <button class="bg-green-600 px-5 py-2 rounded-md" type="submit">Search</button>    
-        </form>
-    </section>
-    {% include "event_list.html" %}
 {% endblock content %}

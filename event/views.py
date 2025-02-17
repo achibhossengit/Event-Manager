@@ -7,6 +7,17 @@ from django.contrib import messages
 
 def test_view(request):
     return render(request, 'test.html')
+def homepage(request):
+    if request.method=='POST':
+        keyword = request.POST.get('keyword')
+    else:
+        keyword = 'a'
+    events = Event.objects.filter(Q(name__icontains=keyword)|Q(description__icontains=keyword)|Q(location__icontains=keyword))
+    context = {
+        'events': events
+    }
+    return render(request, 'homepage.html', context)
+        
 
 def dashboard(request):
     section_title = "Today's Events"
@@ -138,7 +149,6 @@ def delete_category(request):
 
 def update_category(request):
     category_id = request.GET.get('category_id')
-    print(category_id)
     try:
         category = Category.objects.get(id=category_id)
         if request.method == 'POST':

@@ -17,10 +17,9 @@
         </div>
         <div>
             <ul class="flex gap-5">
-                <li><a href="">Home</a></li>
-                <li><a href="">Events</a></li>
-                <li><a href="">Dashboard</a></li>
-                <li><a href="">Management</a></li>
+                <li><a href="{% url 'homepage' %}">Home</a></li>
+                <li><a href="{% url 'dashboard' %}">Dashboard</a></li>
+                <li><a href="{% url "management" %}">Management</a></li>
             </ul>
         </div>
     </header>
