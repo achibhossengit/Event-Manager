@@ -1,49 +1,56 @@
 {% extends "header.html" %}
 {% load static %}
 {% block content %}
-    <section class="w-1/2 mx-auto shadow-lg p-5">
-        <div>
-            <h3 class="text-2xl font-bold py-3"> {{event.name}} </h3>
-            <img class="w-full rounded-md" src="{% static 'images/event-details-2.jpg' %}" alt="">
-            <div class="flex justify-between my-7">
-                <div class="bg-green-100 shadow-md rounded-md px-5 py-2 flex items-center gap-5">
-                    <i class="fa-regular fa-calendar-days"></i>
-                    <div>
-                        <p>Category</p>
-                        <p>{{event.category}}</p>
-                    </div>
-                </div>
-                <div class="bg-green-100 shadow-md rounded-md px-5 py-2 flex items-center gap-5">
-                    <i class="fa-regular fa-calendar-days"></i>
-                    <div>
-                        <p> Event Date</p>
-                        <p>{{event.date}}</p>
-                    </div>
-                </div>
-                <div class="bg-green-100 shadow-md rounded-md px-5 py-2 flex items-center gap-5">
-                    <i class="fa-solid fa-clock"></i>
-                    <div>
-                        <p>Event Time</p>
-                        <p>{{event.time}}</p>
-                    </div>
-                </div>
-                <div class="bg-green-100 shadow-md rounded-md px-5 py-2 flex items-center gap-5">
-                    <i class="fa-solid fa-location-dot"></i>
-                    <div>
-                        <p>Location</p>
-                        <p>{{event.location}}</p>
-                    </div>
+<section class="w-11/12 mx-auto md:w-2/3 shadow-2xl p-10 border border-green-100 rounded-xl">
+    <div>
+        <img class="w-1/2 mx-auto rounded-lg" src="{% static 'images/event-details-2.jpg' %}" alt=""/>
+        <h3 class="text-2xl font-bold py-3 text-center md:text-left">{{ event.name }}</h3>
+        <div class="flex flex-wrap justify-between gap-4 my-7">
+            {% comment %} Category {% endcomment %}
+            <div class="bg-green-100 shadow-md rounded-md px-5 py-2 flex items-center gap-3 md:gap-5 w-full sm:w-auto">
+                <i class="fa-solid fa-list"></i>
+                <div>
+                    <p class="text-sm font-semibold">Category</p>
+                    <p class="text-sm">{{ event.category }}</p>
                 </div>
             </div>
-            <p>{{event.description}}</p>
+            {% comment %} Event Date {% endcomment %}
+            <div class="bg-green-100 shadow-md rounded-md px-5 py-2 flex items-center gap-3 md:gap-5 w-full sm:w-auto">
+                <i class="fa-regular fa-calendar-days text-lg"></i>
+                <div>
+                    <p class="text-sm font-semibold">Event Date</p>
+                    <p class="text-sm">{{ event.date }}</p>
+                </div>
+            </div>
+            {% comment %} Event Time {% endcomment %}
+            <div class="bg-green-100 shadow-md rounded-md px-5 py-2 flex items-center gap-3 md:gap-5 w-full sm:w-auto">
+                <i class="fa-solid fa-clock text-lg"></i>
+                <div>
+                    <p class="text-sm font-semibold">Event Time</p>
+                    <p class="text-sm">{{ event.time }}</p>
+                </div>
+            </div>
+            {% comment %} Location {% endcomment %}
+            <div class="bg-green-100 shadow-md rounded-md px-5 py-2 flex items-center gap-3 md:gap-5 w-full sm:w-auto">
+                <i class="fa-solid fa-location-dot text-lg"></i>
+                <div>
+                    <p class="text-sm font-semibold">Location</p>
+                    <p class="text-sm">{{ event.location }}</p>
+                </div>
+            </div>
         </div>
-        <div>
-            <h2 class="text-2xl font-semibold">Participants -</h2>
-            <ul class="list-disc list-inside pl-5">
-                {% for participant in participants %}
-                    <li>{{participant.name}}</li>
-                {% endfor %}
-            </ul>
-        </div>
-    </section>
+        <p class="text-sm leading-relaxed text-justify">
+            {{ event.description }}
+        </p>
+    </div>
+    {% comment %} participants {% endcomment %}
+    <div class="mt-7">
+        <h2 class="text-lg font-bold mb-3">Participants -</h2>
+        <ul class="list-disc list-inside pl-5 text-sm">
+            {% for participant in participants %}
+            <li>{{ participant.name }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+</section>
 {% endblock content %}
