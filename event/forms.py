@@ -13,7 +13,7 @@ class StyledFormMixin:
                 # print('N')
                 field.widget.attrs.update({
                     'class':f'{self.default_classes} w-full',
-                    'placeholder': f'Enter {field.label.lower()}'
+                    'placeholder': f'Enter {field.label}'
                 })
             elif isinstance(field.widget, forms.SelectDateWidget):
                 # print('inside select_date_widget')
@@ -43,7 +43,7 @@ class EventModelForm(StyledFormMixin, forms.ModelForm):
         fields = ['name', 'description', 'date', 'time', 'location', 'category']
         widgets ={
             'date':forms.SelectDateWidget,
-            'time':forms.TimeInput,
+            'time':forms.TimeInput(attrs={'placeholcer': 'HH:MM:SS'}),
         }
 
     def __init__(self, *args, **kwargs):
