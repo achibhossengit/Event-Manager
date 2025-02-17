@@ -5,8 +5,6 @@ from datetime import date
 from django.db.models import Count, Q
 from django.contrib import messages
 
-def test_view(request):
-    return render(request, 'participant_list.html')
 def homepage(request):
     if request.method=='POST':
         keyword = request.POST.get('keyword')
