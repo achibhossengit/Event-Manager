@@ -10,21 +10,21 @@
     <title>Event Manager</title>
 </head>
 <body>
-    <header class="flex items-center justify-between px-5 bg-green-100">
-        <div class="flex items-center">
-            <img class="w-1/6" src="../../static/images/logo.png" alt="">
-            <h1 class="text-2xl font-bold">Events Manager</h1>
+    <header class="flex flex-col sm:flex-row sm:items-center sm:justify-between px-5 py-3 bg-green-100">
+        <div class="flex items-center justify-between">
+            <img class="w-20 lg:w-24 h-auto" src="{% static 'images/logo.png' %}" alt="Logo">
+            <h1 class="text-xl sm:text-2xl lg:text-3xl font-bold">Events Manager</h1>
         </div>
-        <div>
-            <ul class="flex gap-5">
-                <li><a href="{% url 'homepage' %}">Home</a></li>
-                <li><a href="{% url 'dashboard' %}">Dashboard</a></li>
-                <li><a href="{% url "management" %}">Management</a></li>
+        <div class="mt-3 sm:mt-0">
+            <ul class="flex justify-center gap-3 text-center">
+                <li><a class="hover:text-green-600" href="{% url 'homepage' %}">Home</a></li>
+                <li><a class="hover:text-green-600" href="{% url 'dashboard' %}">Dashboard</a></li>
+                <li><a class="hover:text-green-600" href="{% url 'management' %}">Management</a></li>
             </ul>
         </div>
     </header>
-    {% comment %} here, will appear dynamic pages {% endcomment %}
-    <main class="bg-green-50">
+
+    <main class="bg-green-50 p-5">
         {% block content %}{% endblock content %}
     </main>
 </body>
