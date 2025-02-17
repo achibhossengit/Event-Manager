@@ -1,10 +1,12 @@
 {% extends "header.html" %}
 {% block content %}
     <section class="grid lg:grid-cols-5 md:grid-cols-2 sm:grid-cols-1 gap-5 py-10">
-        <div class="flex gap-2 p-5 bg-blue-100 shadow-md text-2xl font-semibold rounded-md">
-            <div><i class="fa-regular fa-calendar-days"></i></div>
-            <h4>Total Participants: {{total_participants}}</h4>
-        </div>
+        <a href="{% url 'participant-list' %}">
+            <div class="flex gap-2 p-5 bg-blue-100 shadow-md text-2xl font-semibold rounded-md">
+                <div><i class="fa-regular fa-calendar-days"></i></div>
+                <h4>Total Participants: {{total_participants}}</h4>
+            </div>
+        </a>
         <a href="{% url 'dashboard' %}?type=total_events">
             <div class="flex gap-2 p-5 bg-blue-100 shadow-md text-2xl font-semibold rounded-md">
                 <div><i class="fa-regular fa-calendar-days"></i></div>
