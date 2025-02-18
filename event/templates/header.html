@@ -19,7 +19,19 @@
             <ul class="flex justify-center gap-3 text-center">
                 <li><a class="hover:text-green-600" href="{% url 'homepage' %}">Home</a></li>
                 <li><a class="hover:text-green-600" href="{% url 'dashboard' %}">Dashboard</a></li>
-                <li><a class="hover:text-green-600" href="{% url 'management' %}">Management</a></li>
+                {% comment %} <li><a class="hover:text-green-600" href="{% url 'management' %}">Management</a></li> {% endcomment %}
+
+                {% comment %} creating dropdown {% endcomment %}
+                <li>
+                    <button class="group relative">
+                        Management
+                        <div class="absolute top-full right-0 rounded-lg p-3 mt-1 bg-white scale-y-0 group-focus:scale-y-100 group-hover:scale-y-100 origin-top duration-200">
+                                <a href="{% url 'management-events' %}" class="active">Events</a>
+                                <a href="{% url 'management-categories' %}">Categories</a>
+                                <a href="{% url 'management-participants' %}" >Participants</a>
+                        </div>
+                    </button>
+                </li>
             </ul>
         </div>
     </header>
