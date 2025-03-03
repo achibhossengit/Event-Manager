@@ -8,7 +8,7 @@
                 <div class="bg-sky-200 rounded-lg p-5">
                     <img class="rounded-full w-20 mb-5" src="{% static 'images/participant_img.jpg' %}" alt="">
                     <p class="font-semibold">ID: {{participant.id}}</p>
-                    <p class="font-semibold">Name: {{participant.name}}</p>
+                    <p class="font-semibold">Name: {{participant.first_name}} {{participant.last_name}}</p>
                     <p class="font-semibold">Email: {{participant.email}}</p>
                 </div>
             {% endfor %}

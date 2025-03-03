@@ -101,7 +101,7 @@
                             <tr>
                                 <td class="p-2 border md:px-6 md:py-3 md:border-none text-sm text-gray-700">{{ forloop.counter }}</td>
                                 <td class="p-2 border md:px-6 md:py-3 md:border-none text-sm text-gray-700">{{ participant.id }}</td>
-                                <td class="p-2 border md:px-6 md:py-3 md:border-none text-sm text-gray-700">{{ participant.name }}</td>
+                                <td class="p-2 border md:px-6 md:py-3 md:border-none text-sm text-gray-700">{{ participant.first_name }} {{participant.last_name}}</td>
                                 <td class="p-2 border md:px-6 md:py-3 md:border-none text-sm text-gray-700">{{ participant.email }}</td>
                             </tr>
                         {% endfor %}

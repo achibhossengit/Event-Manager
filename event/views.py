@@ -1,9 +1,10 @@
 from django.shortcuts import render, HttpResponse, redirect
-from event.forms import EventModelForm, CategoryModelForm, ParticipantModelForm
-from event.models import Event, Category, Participant
+from event.forms import EventModelForm, CategoryModelForm
+from event.models import Event, Category
 from datetime import date
 from django.db.models import Count, Q
 from django.contrib import messages
+from django.contrib.auth.models import User
 
 def homepage(request):
     if request.method=='POST':
@@ -27,7 +28,7 @@ def dashboard(request):
         upcoming = Count('id', filter=Q(date__gt = date.today())),
         past = Count('id', filter=Q(date__lt = date.today()))
     )
-    participants = Participant.objects.all()
+    participants = User.objects.all()
     total_participants = participants.count()
     if type=='total_events':
         events = Event.objects.all()
@@ -89,7 +90,7 @@ def management_categories(request):
     context ={'categories':categorires}
     return render(request, 'management.html', context)
 def management_participants(request):
-    participants = Participant.objects.all()
+    participants = User.objects.all()
     context ={'participants':participants}
     return render(request, 'management.html', context)
 
@@ -184,57 +185,3 @@ def update_category(request):
     except:
         messages.error(request, "Please Provide a valid ID.")
         return redirect('management-categories')
-    
-def create_participant(request):
-    participant_form = ParticipantModelForm()
-    if request.method == 'POST':
-        participant_form = ParticipantModelForm(request.POST)
-        if participant_form.is_valid():
-            participant_form.save()
-            messages.success(request, "Added successfully!")
-            return redirect('management-participants')
-    context = {
-        'participant_form': participant_form
-    }
-    return render(request, 'create.html', context)
-
-def delete_participant(request):
-    if request.method == 'POST':
-        participant_id = request.POST.get('participant_id')
-        try:
-            participant = Participant.objects.get(id=participant_id)
-            participant.delete()
-            messages.success(request, "Participant removed successfully!")
-            return redirect('management-participants')
-        except:
-            messages.error(request, "Invalid ID!")
-            return redirect('management-participants')
-    
-def update_participant(request):
-    participant_id = request.GET.get('participant_id')
-    try:
-        participant = Participant.objects.get(id=participant_id)
-        if request.method == 'POST':
-            participant_form = ParticipantModelForm(request.POST, instance=participant)
-            if participant_form.is_valid():
-                participant_form.save()
-                messages.success(request, "Updated successfully!")
-                return redirect('management-participants')
-        else:
-            participant_form = ParticipantModelForm(instance=participant)
-            context={
-                'participant_form': participant_form
-            }
-            return render(request, 'update.html', context)
-    except:
-        messages.error(request, "Invalid ID!")
-        return redirect('management-participants')
-
-
-
-def participant_list(request):
-    participants = Participant.objects.all()
-    context = {
-        'participants': participants
-    }
-    return render(request, 'participant_list.html', context)
