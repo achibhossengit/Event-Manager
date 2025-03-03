@@ -50,7 +50,7 @@ def dashboard(request):
         'events':events,
         'counts':counts
     }
-    return render(request, 'dashboard.html', context)
+    return render(request, 'dashboard/manager_dashboard.html', context)
 
 
 def event_details(request, id):

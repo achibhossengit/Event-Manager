@@ -1,7 +1,8 @@
 from django.shortcuts import render, redirect
-from users.forms import UserModelForm
+from users.forms import UserModelForm, LogInForm
 from django.contrib.auth.models import User
 from django.contrib import messages
+from django.contrib.auth import login
 
 def sign_up(request):
     form = UserModelForm()
@@ -57,11 +58,22 @@ def update_participant(request):
         messages.error(request, "Invalid ID!")
         return redirect('management-participants')
 
-
-
 def participant_list(request):
     participants = User.objects.all()
     context = {
         'participants': participants
     }
     return render(request, 'participant_list.html', context)
+
+# authentications
+def log_in(request):
+    form = LogInForm()
+    if request.method == 'POST':
+        form = LogInForm(data = request.POST)
+        if form.is_valid():
+            username = form.cleaned_data['username']
+            user = User.objects.get(username=username)
+            login(request, user)
+            return redirect('homepage')
+
+    return render(request, 'log_in.html', {'form':form})

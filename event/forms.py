@@ -11,7 +11,7 @@ class StyledFormMixin:
 
     def apply_default_classes(self):
         for field_name, field in self.fields.items():
-            if isinstance(field.widget, forms.TextInput) or isinstance(field.widget, forms.EmailInput):
+            if isinstance(field.widget, forms.TextInput) or isinstance(field.widget, forms.EmailInput) or isinstance(field.widget, forms.PasswordInput):
                 field.widget.attrs.update({
                     'class':f'{self.default_classes} w-full',
                     'placeholder': f'Enter {field.label}'
