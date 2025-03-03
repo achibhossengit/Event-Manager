@@ -2,7 +2,8 @@ from django.shortcuts import render, redirect
 from users.forms import UserModelForm, LogInForm
 from django.contrib.auth.models import User
 from django.contrib import messages
-from django.contrib.auth import login
+from django.contrib.auth import login, logout
+from django.contrib.auth.decorators import login_required
 
 def sign_up(request):
     form = UserModelForm()
@@ -77,3 +78,8 @@ def log_in(request):
             return redirect('homepage')
 
     return render(request, 'log_in.html', {'form':form})
+
+@login_required
+def log_out(request):
+    logout(request)
+    return redirect('homepage')
