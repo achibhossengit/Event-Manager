@@ -96,7 +96,7 @@ def management_participants(request):
 
 def create_event(request):
     if request.method == 'POST':
-        event_form = EventModelForm(request.POST)
+        event_form = EventModelForm(request.POST, request.FILES)
         if event_form.is_valid():
             event_form.save()
             messages.success(request, "Event created Successfully!")
