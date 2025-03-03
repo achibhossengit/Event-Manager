@@ -4,6 +4,11 @@ from event.models import Event, Category, Participant
 """ Mixins """
 class StyledFormMixin:
     default_classes = 'border-2 bg-gray-200 rounded-lg p-3'
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)  # Call the parent's __init__ method
+        self.apply_default_classes()
+
     def apply_default_classes(self):
         for field_name, field in self.fields.items():
             if isinstance(field.widget, forms.TextInput) or isinstance(field.widget, forms.EmailInput):
@@ -40,20 +45,10 @@ class EventModelForm(StyledFormMixin, forms.ModelForm):
             'time':forms.TimeInput,
         }
 
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.apply_default_classes()
-
-
 class CategoryModelForm(StyledFormMixin, forms.ModelForm):
     class Meta:
         model = Category
         fields = '__all__'
-        
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.apply_default_classes()
-
 
 class ParticipantModelForm(StyledFormMixin, forms.ModelForm):
     class Meta:
@@ -62,7 +57,3 @@ class ParticipantModelForm(StyledFormMixin, forms.ModelForm):
         widgets={
             'events': forms.CheckboxSelectMultiple,
         }
-    
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.apply_default_classes()
