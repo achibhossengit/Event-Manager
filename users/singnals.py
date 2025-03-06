@@ -7,7 +7,6 @@ from django.contrib.auth.models import User, Group
 # default parameer for pre_save signals: sender, instance, raw, using(when used multiple database its define which database used here), **kwargs(for send custom parameters)
 def assign_default_role(sender,instance, created, **kwargs):
     if created:
-        print('checking')
-        user_group, created = Group.objects.get_or_create(name='Participants')
+        user_group, created = Group.objects.get_or_create(name='Participant')
         instance.groups.add(user_group)
         instance.save()
