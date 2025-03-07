@@ -1,0 +1,118 @@
+{% extends "header.html" %}
+{% block content %}
+    <section class="grid lg:grid-cols-5 md:grid-cols-2 sm:grid-cols-1 gap-5 py-10">
+        <a href="{% url 'dashboard' %}?type=past">
+            <div class="flex gap-2 p-5 bg-blue-100 shadow-md justify-center text-2xl font-semibold rounded-md">
+                <div><i class="fa-solid fa-check"></i></div>
+                <h4>Past Events: {{counts.past}}</h4>
+            </div>
+        </a>
+        <a href="{% url 'dashboard' %}?type=today">
+            <div class="flex gap-2 p-5 bg-blue-100 shadow-md text-2xl justify-center font-semibold rounded-md">
+                <div><i class="fa-solid fa-calendar-week"></i></div>
+                <h4>Today's Events: {{counts.today}}</h4>
+            </div>
+        </a>
+        <a href="{% url 'dashboard' %}?type=upcoming">
+            <div class="flex gap-2 p-5 bg-blue-100 shadow-md text-2xl justify-center font-semibold rounded-md">
+                <div><i class="fa-regular fa-calendar-days"></i></div>
+                <h4>Upcoming Events: {{counts.upcoming}}</h4>
+            </div>
+        </a>
+        <a href="{% url 'dashboard' %}?type=total_events">
+            <div class="flex gap-2 p-5 bg-blue-100 shadow-md justify-center text-2xl font-semibold rounded-md">
+                <div><i class="fa-solid fa-border-all"></i></div>
+                <h4>Total Events: {{counts.total}}</h4>
+            </div>
+        </a>
+        <a href="{% url 'dashboard' %}?type=categories">
+            <div class="flex gap-2 p-5 bg-blue-100 shadow-md text-2xl justify-center font-semibold rounded-md">
+                <div><i class="fa-regular fa-calendar-days"></i></div>
+                <h4>Categories: {{category_count}}</h4>
+            </div>
+        </a>        
+    </section>
+    {% comment %} messages {% endcomment %}
+    <section class="pt-5">
+        {% if messages %}
+            {% for message in messages %}
+                {% if message.tags == "success" %}
+                    <p class="text-2xl font-semibold text-center text-green-500">{{message}}</p>
+                {% elif message.tags == "error" %}
+                    <p class="text-2xl font-semibold text-center text-red-500">{{message}}</p>
+                {% endif %}
+            {% endfor %}
+        {% endif %}
+    </section>
+    {% comment %} events and categories list {% endcomment %}
+    <section class="flex justify-center py-5">
+        {% if events %}
+            <div>
+                <h2 class="text-2xl font-bold text-center">{{section_title}}</h2>
+                <div>
+                    <a href="{% url 'create-event' %}" class="my-5 block w-full text-center bg-green-600 px-5 py-2 rounded-md text-white font-semibold"><i class="fa-solid fa-plus"></i> Create New Event</a>
+                </div>
+                <table class="px-5 border border-gray-200 rounded-lg shadow-md border-collapse">
+                    <thead>
+                        <tr class="bg-gray-100 text-gray-600">
+                            <th class="p-2 border-b md:px-6 md:py-3 md:border-none text-left text-sm font-semibold">Sl</th>
+                            {% comment %} <th class="p-2 border-b md:px-6 md:py-3 md:border-none text-left text-sm font-semibold">ID</th> {% endcomment %}
+                            <th class="p-2 border-b md:px-6 md:py-3 md:border-none text-left text-sm font-semibold">Name</th>
+                            <th class="p-2 border-b md:px-6 md:py-3 md:border-none text-left text-sm font-semibold">Date</th>
+                            <th class="p-2 border-b md:px-6 md:py-3 md:border-none text-center text-sm font-semibold">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for event in events %}
+                            <tr>
+                                <td class="p-2 border md:px-6 md:py-3 md:border-none text-sm text-gray-700">{{ forloop.counter}} </td>
+                                {% comment %} <td class="p-2 border md:px-6 md:py-3 md:border-none text-sm text-gray-700">{{ event.id }}</td> {% endcomment %}
+                                <td class="p-2 border md:px-6 md:py-3 md:border-none text-sm text-gray-700">{{ event.name }}</td>
+                                <td class="p-2 border md:px-6 md:py-3 md:border-none text-sm text-gray-700">{{ event.date }}</td>
+                                <td class="p-2 border md:px-6 md:py-3 md:border-none text-sm text-gray-700">
+                                    <div class="flex gap-8">
+                                        <a href="{% url 'delete-event' event.id %}" type="submit" class="text-red-500 font-bold"><i class="fa-solid fa-trash"></i></a>
+                                        <a href="{% url 'update-event' event.id %}" type="submit" class="text-green-500 font-bold"><i class="fa-solid fa-pen-nib"></i></a>
+                                    </div>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        {% elif categories %}
+            <div>
+                <h2 class="text-2xl font-bold text-center">Categories</h2>
+                <div>
+                    <a href="{% url 'create-event' %}" class="my-5 block w-full text-center bg-green-600 px-5 py-2 rounded-md text-white font-semibold"><i class="fa-solid fa-plus"></i> Create New Category</a>
+                </div>
+                <table class="px-5 border border-gray-200 rounded-lg shadow-md border-collapse">
+                    <thead>
+                        <tr class="bg-gray-100 text-gray-600">
+                            <th class="p-2 border-b md:px-6 md:py-3 md:border-none text-left text-sm font-semibold">Sl</th>
+                            <th class="p-2 border-b md:px-6 md:py-3 md:border-none text-left text-sm font-semibold">Name</th>
+                            <th class="p-2 border-b md:px-6 md:py-3 md:border-none text-left text-sm font-semibold">Description</th>
+                            <th class="p-2 border-b md:px-6 md:py-3 md:border-none text-left text-sm font-semibold">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for category in categories %}
+                            <tr>
+                                <td class="p-2 border md:px-6 md:py-3 md:border-none text-sm text-gray-700">{{ forloop.counter }}</td>
+                                <td class="p-2 border md:px-6 md:py-3 md:border-none text-sm text-gray-700">{{ category.name }}</td>
+                                <td class="p-2 border md:px-6 md:py-3 md:border-none text-sm text-gray-700">{{ category.description|slice:":10"}}...</td>
+                                <td class="p-2 border md:px-6 md:py-3 md:border-none text-sm text-gray-700">
+                                    <div class="flex gap-8">
+                                        <a href="{% url 'delete-category' category.id %}" type="submit" class="text-red-500 font-bold"><i class="fa-solid fa-trash"></i></a>
+                                        <a href="{% url 'update-category' category.id %}" type="submit" class="text-green-500 font-bold"><i class="fa-solid fa-pen-nib"></i></a>
+                                    </div>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        {% endif %}
+    </section>
+      
+{% endblock content %}

@@ -19,8 +19,12 @@ def homepage(request):
         
 
 def dashboard(request):
-    section_title = "Today's Events"
     events = Event.objects.filter(date=date.today())
+    section_title = "Today's Events"
+    if len(events)==0:
+        events = Event.objects.all()
+        section_title = "Total Events"
+    categories = None
     type = request.GET.get('type')
     counts = Event.objects.aggregate(
         total = Count('id'),
@@ -28,6 +32,7 @@ def dashboard(request):
         upcoming = Count('id', filter=Q(date__gt = date.today())),
         past = Count('id', filter=Q(date__lt = date.today()))
     )
+    category_count = Category.objects.all().count()
     participants = User.objects.all()
     total_participants = participants.count()
     if type=='total_events':
@@ -42,15 +47,19 @@ def dashboard(request):
     elif type=='past':
         events = Event.objects.filter(date__lt=date.today())
         section_title = "Past Events "
+    elif type=='categories':
+        categories = Category.objects.all()
 
     context = {
         'section_title':section_title,
         'participants':participants,
         'total_participants':total_participants,
         'events':events,
-        'counts':counts
+        'categories': categories,
+        'counts':counts,
+        'category_count':category_count
     }
-    return render(request, 'dashboard/manager_dashboard.html', context)
+    return render(request, 'dashboard/organizer_dashboard.html', context)
 
 
 def event_details(request, id):
@@ -63,44 +72,13 @@ def event_details(request, id):
         }
         return render( request, 'event_details.html', context)
 
-# work with this views when you will free
-# def management(request):
-#     type = request.GET.get('type')
-#     print(type)
-#     if(type=='events'):
-#         events = Event.objects.all()
-#         context ={'events':events}
-#     elif(type=='categories'):
-#         categories = Category.objects.all()
-#         context = {'categories': categories}
-#     else:
-#         participants = Participant.objects.all()
-#         context={
-#             'participants': participants
-#         }
-
-#     return render(request, 'management.html', context)
-
-def management_events(request):
-    events = Event.objects.all()
-    context ={'events':events}
-    return render(request, 'management.html', context)
-def management_categories(request):
-    categorires = Category.objects.all()
-    context ={'categories':categorires}
-    return render(request, 'management.html', context)
-def management_participants(request):
-    participants = User.objects.all()
-    context ={'participants':participants}
-    return render(request, 'management.html', context)
-
 def create_event(request):
     if request.method == 'POST':
         event_form = EventModelForm(request.POST, request.FILES)
         if event_form.is_valid():
             event_form.save()
             messages.success(request, "Event created Successfully!")
-            return redirect('management-events')
+            return redirect('dashboard')
     else:
         event_form = EventModelForm()
     context = {
@@ -108,37 +86,26 @@ def create_event(request):
     }
     return render(request, 'create.html', context)
 
-def delete_event(request):
+def delete_event(request, event_id):
+    event = Event.objects.get(id=event_id)
+    event.delete()
+    messages.success(request, "Event deleted successfully!")
+    return redirect('dashboard')
+
+def update_event(request, event_id):
+    event = Event.objects.get(id=event_id)
     if request.method == 'POST':
-        event_id = request.POST.get('event_id')
-        try:
-            event = Event.objects.get(id=event_id)
-            event.delete()
-            messages.success(request, "Event deleted successfully!")
-        except:
-            messages.error(request, 'Your ID is invalid! Enter a valid ID please.')
-    return redirect('management-events')
-
-def update_event(request):
-    event_id = request.GET.get('event_id')
-    try:
-        event = Event.objects.get(id=event_id)
-        if request.method == 'POST':
-                event_form = EventModelForm(request.POST, instance=event)
-                if event_form.is_valid():
-                    event_form.save()
-                    messages.success(request, "Event updated successfully!")
-                    return redirect('management-events')
-        else:
-            event_form = EventModelForm(instance=event)
-            context = {
-                'event_form':event_form
-            }
-            return render(request, 'update.html', context)
-
-    except:
-        messages.error(request, "Your ID is invalid! Please enter a valid event ID.")
-        return redirect('management-events')
+        event_form = EventModelForm(request.POST, instance=event)
+        if event_form.is_valid():
+            event_form.save()
+            messages.success(request, "Event updated successfully!")
+            return redirect('dashboard')
+    else:
+        event_form = EventModelForm(instance=event)
+        context = {
+            'event_form':event_form
+        }
+        return render(request, 'update.html', context)
 
 
 
@@ -147,7 +114,7 @@ def create_category(request):
         category_form = CategoryModelForm(request.POST)
         category_form.save()
         messages.success(request, "Category Added Successfully!")
-        return redirect('management-categories')
+        return redirect('dashboard')
     else:
         category_form = CategoryModelForm()
     context = {
@@ -155,33 +122,24 @@ def create_category(request):
     }
     return render(request, 'create.html', context)
 
-def delete_category(request):
-    if request.method == 'POST':
-        category_id = request.POST.get('category_id')
-        try:
-            category = Category.objects.get(id=category_id)
-            category.delete()
-            messages.success(request, "Category deleted successfully!")
-        except:
-            messages.error(request, "Your Category ID is invalid! Please Provide a valid ID.")
-        return redirect('management-categories')
+def delete_category(request, category_id):
+    category = Category.objects.get(id=category_id)
+    category.delete()
+    messages.success(request, "Category deleted successfully!")
+    return redirect('dashboard')
 
-def update_category(request):
-    category_id = request.GET.get('category_id')
-    try:
-        category = Category.objects.get(id=category_id)
-        if request.method == 'POST':
-            category_form = CategoryModelForm(request.POST, instance=category)
-            if category_form.is_valid():
-                category_form.save()
-                messages.success(request, "Category Updated successfully!")
-                return redirect('management-categories')
-        else:
-            category_form = CategoryModelForm(instance=category)
-            context = {
-                'category_form': category_form
-            }
-            return render(request, 'update.html', context)
-    except:
-        messages.error(request, "Please Provide a valid ID.")
-        return redirect('management-categories')
+def update_category(request, category_id):
+    category = Category.objects.get(id=category_id)
+    if request.method == 'POST':
+        category_form = CategoryModelForm(request.POST, instance=category)
+        if category_form.is_valid():
+            category_form.save()
+            messages.success(request, "Category Updated successfully!")
+            return redirect('dashboard')
+    else:
+        category_form = CategoryModelForm(instance=category)
+        context = {
+            'category_form': category_form
+        }
+        return render(request, 'update.html', context)
+    return redirect('dashboard')

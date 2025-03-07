@@ -3,16 +3,11 @@ from users.forms import UserModelForm, LogInForm
 from django.contrib.auth.models import User
 from django.contrib import messages
 from django.contrib.auth import login, logout
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, permission_required
 
-def sign_up(request):
-    form = UserModelForm()
-    if request.method == 'POST':
-        form = UserModelForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect('homepage')
-    return render(request, 'sign_up.html', {'form':form})
+# views
+def no_permission(request):
+    return render(request, 'no-permission.html')
 
 def create_participant(request):
     participant_form = UserModelForm()
@@ -27,6 +22,8 @@ def create_participant(request):
     }
     return render(request, 'create.html', context)
 
+@login_required(login_url='sign-in')
+@permission_required(perm='event.delete_participants', login_url='no-permission')
 def delete_participant(request):
     if request.method == 'POST':
         participant_id = request.POST.get('participant_id')
@@ -38,7 +35,9 @@ def delete_participant(request):
         except:
             messages.error(request, "Invalid ID!")
             return redirect('management-participants')
-    
+
+@login_required(login_url='sign-in')
+@permission_required(perm='event.update_participants', login_url='no-permission')
 def update_participant(request):
     participant_id = request.GET.get('participant_id')
     try:
@@ -59,6 +58,8 @@ def update_participant(request):
         messages.error(request, "Invalid ID!")
         return redirect('management-participants')
 
+@login_required(login_url='sign-in')
+@permission_required(perm='event.delete_participants', login_url='no-permission')
 def participant_list(request):
     participants = User.objects.all()
     context = {
@@ -67,6 +68,18 @@ def participant_list(request):
     return render(request, 'participant_list.html', context)
 
 # authentications
+def sign_up(request):
+    form = UserModelForm()
+    if request.method == 'POST':
+        form = UserModelForm(request.POST)
+        if form.is_valid():
+            user = form.save(commit=False) # just create an object not save in database
+            user.set_password(form.cleaned_data.get('password')) # for proper hasing and set password. its so important
+            form.save() # save in database
+            return redirect('homepage')
+    return render(request, 'sign_up.html', {'form':form})
+
+
 def log_in(request):
     form = LogInForm()
     if request.method == 'POST':
@@ -79,7 +92,7 @@ def log_in(request):
 
     return render(request, 'log_in.html', {'form':form})
 
-@login_required
+@login_required(login_url='sign-in')
 def log_out(request):
     logout(request)
     return redirect('homepage')
