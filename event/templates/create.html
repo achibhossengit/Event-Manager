@@ -8,6 +8,8 @@
                     {{category_form.as_p}}
             {% elif participant_form %}
                 {{participant_form.as_p}}
+            {% elif group_form %}
+                {{group_form.as_p}}
             {% endif %}
 
             {% csrf_token %}

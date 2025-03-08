@@ -4,8 +4,22 @@ from event.models import Event, Category
 from datetime import date
 from django.db.models import Count, Q
 from django.contrib import messages
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, Group
+from django.contrib.auth.decorators import login_required, user_passes_test, permission_required
 
+# user checking function
+def is_admin(user):
+    return user.groups.filter(name='Admin').exists()
+
+def is_organizer(user):
+    return user.groups.filter(name='Organizer').exists()
+
+def is_participant(user):
+    return user.groups.filter(name='Participant').exists()
+
+
+
+# views container
 def homepage(request):
     if request.method=='POST':
         keyword = request.POST.get('keyword')
@@ -17,15 +31,8 @@ def homepage(request):
     }
     return render(request, 'homepage.html', context)
         
-
+@login_required(login_url='sign-in')
 def dashboard(request):
-    events = Event.objects.filter(date=date.today())
-    section_title = "Today's Events"
-    if len(events)==0:
-        events = Event.objects.all()
-        section_title = "Total Events"
-    categories = None
-    type = request.GET.get('type')
     counts = Event.objects.aggregate(
         total = Count('id'),
         today = Count('id', filter=Q(date=date.today())),
@@ -33,8 +40,14 @@ def dashboard(request):
         past = Count('id', filter=Q(date__lt = date.today()))
     )
     category_count = Category.objects.all().count()
-    participants = User.objects.all()
-    total_participants = participants.count()
+    total_participants = User.objects.count()
+    total_groups = Group.objects.count()
+
+    events = None
+    categories = None
+    users = None
+    groups = None
+    type = request.GET.get('type')
     if type=='total_events':
         events = Event.objects.all()
         section_title = "Total Events "
@@ -49,17 +62,40 @@ def dashboard(request):
         section_title = "Past Events "
     elif type=='categories':
         categories = Category.objects.all()
+        section_title = "Categories"
+    elif type=='users':
+        users = User.objects.all()
+        section_title = "User List"
+    elif type=='groups':
+        groups = Group.objects.all()
+        section_title = "Group"
+    else:
+        events = Event.objects.filter(date=date.today())
+        section_title = "Today's Events"
+        if len(events)==0:
+            events = Event.objects.all()
+            section_title = "Total Events"
 
     context = {
         'section_title':section_title,
-        'participants':participants,
         'total_participants':total_participants,
+        'category_count':category_count,
+        'total_groups': total_groups,
+        'counts':counts,
+        'users':users,
         'events':events,
         'categories': categories,
-        'counts':counts,
-        'category_count':category_count
+        'groups': groups,
     }
-    return render(request, 'dashboard/organizer_dashboard.html', context)
+
+    if(is_admin(request.user)):
+        return render(request, 'dashboard/admin_dashboard.html', context)
+    if(is_organizer(request.user)):
+        return render(request, 'dashboard/organizer_dashboard.html', context)
+    elif(is_participant(request.user)):
+        return render(request, 'dashboard/participant_dashboard.html', context)
+    else:
+        return redirect('no-permission')
 
 
 def event_details(request, id):

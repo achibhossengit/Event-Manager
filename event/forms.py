@@ -22,7 +22,7 @@ class StyledFormMixin:
                 })
             elif isinstance(field.widget, forms.CheckboxSelectMultiple):
                 field.widget.attrs.update({
-                    'class': 'mb-3'
+                    'class': 'mb-3 max-h-40 overflow-y-auto'
                 })
             elif isinstance(field.widget, forms.TimeInput):
                 # its not working. Debug later
