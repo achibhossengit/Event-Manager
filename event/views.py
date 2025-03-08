@@ -95,10 +95,13 @@ def dashboard(request):
     }
 
     if(is_admin(request.user)):
+        context['role'] = 'Admin'
         return render(request, 'dashboard/admin_dashboard.html', context)
     if(is_organizer(request.user)):
+        context['role'] ='Organizer'
         return render(request, 'dashboard/organizer_dashboard.html', context)
     elif(is_participant(request.user)):
+        context['role'] = 'Participant'
         return render(request, 'dashboard/participant_dashboard.html', context)
     else:
         return redirect('no-permission')
