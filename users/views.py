@@ -86,7 +86,7 @@ def sign_up(request):
             user = form.save(commit=False) # just create an object not save in database
             user.set_password(form.cleaned_data.get('password')) # for proper hasing and set password. its so important
             form.save() # save in database
-            return redirect('homepage')
+            return redirect('log-in')
     return render(request, 'sign_up.html', {'form':form})
 
 
@@ -105,4 +105,4 @@ def log_in(request):
 @login_required(login_url='log-in')
 def log_out(request):
     logout(request)
-    return redirect('homepage')
+    return redirect('log-in')
