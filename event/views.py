@@ -199,3 +199,14 @@ def update_category(request, category_id):
         }
         return render(request, 'update.html', context)
     return redirect('dashboard')
+
+def book_event(request, event_id):
+    event = Event.objects.get(id=event_id)
+    user = request.user
+    if event.participants.filter(id=user.id).exists():
+        messages.error(request, 'You already book this Event!')
+        return redirect('homepage')
+    else:
+        event.participants.add(user)
+        messages.success(request, 'Event Book successfully!')
+        return redirect('homepage')

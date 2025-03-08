@@ -12,6 +12,18 @@
                 <button type="submit" class="bg-green-600 px-5 py-2 rounded-md text-white font-semibold"><i class="fa-solid fa-magnifying-glass"></i> <span class="hidden sm:inline">SEARCH NOW</span></button>
             </form>
         </div>
+        {% comment %} message section {% endcomment %}
+        <div class="pt-5">
+            {% if messages %}
+                {% for message in messages %}
+                    {% if message.tags == "success" %}
+                        <p class="text-2xl font-semibold text-center text-green-500">{{message}}</p>
+                    {% elif message.tags == "error" %}
+                        <p class="text-2xl font-semibold text-center text-red-500">{{message}}</p>
+                    {% endif %}
+                {% endfor %}
+            {% endif %}
+        </div>
         <div>
             {% include "event_card.html" %}
         </div>
