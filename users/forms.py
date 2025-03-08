@@ -17,7 +17,7 @@ class UserRoleModelForm(StyledFormMixin, ModelForm):
             'groups':forms.CheckboxSelectMultiple
         }
         labels = {
-            # 'groups': 'Assign on Groups'
+            'groups': 'User Role'
         }
         help_texts = {
             'groups': ''

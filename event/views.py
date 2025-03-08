@@ -1,11 +1,11 @@
-from django.shortcuts import render, HttpResponse, redirect
+from django.shortcuts import render, redirect
 from event.forms import EventModelForm, CategoryModelForm
 from event.models import Event, Category
 from datetime import date
 from django.db.models import Count, Q
 from django.contrib import messages
 from django.contrib.auth.models import User, Group
-from django.contrib.auth.decorators import login_required, user_passes_test, permission_required
+from django.contrib.auth.decorators import login_required, permission_required, user_passes_test
 
 # user checking function
 def is_admin(user):
@@ -31,7 +31,7 @@ def homepage(request):
     }
     return render(request, 'homepage.html', context)
         
-@login_required(login_url='sign-in')
+@login_required(login_url='log-in')
 def dashboard(request):
     counts = Event.objects.aggregate(
         total = Count('id'),
@@ -61,11 +61,17 @@ def dashboard(request):
         events = Event.objects.filter(date__lt=date.today())
         section_title = "Past Events "
     elif type=='categories':
-        categories = Category.objects.all()
-        section_title = "Categories"
+        if is_admin(request.user) or is_organizer(request.user):
+            categories = Category.objects.all()
+            section_title = "Categories"
+        else:
+            return redirect('no-permission')
     elif type=='users':
-        users = User.objects.all()
-        section_title = "User List"
+        if is_admin(request.user):
+            users = User.objects.all()
+            section_title = "User List"
+        else:
+            return redirect('no-permission')
     elif type=='groups':
         groups = Group.objects.all()
         section_title = "Group"
@@ -97,7 +103,7 @@ def dashboard(request):
     else:
         return redirect('no-permission')
 
-
+@login_required(login_url='log-in')
 def event_details(request, id):
     if request.method=='POST':
         event = Event.objects.get(id=id)
@@ -108,6 +114,8 @@ def event_details(request, id):
         }
         return render( request, 'event_details.html', context)
 
+@login_required(login_url='log-in')
+@permission_required(perm='event.add_event', login_url='no-permission')
 def create_event(request):
     if request.method == 'POST':
         event_form = EventModelForm(request.POST, request.FILES)
@@ -122,12 +130,15 @@ def create_event(request):
     }
     return render(request, 'create.html', context)
 
+@login_required(login_url='log-in')
+@permission_required(perm='event.delete_event', login_url='no-permission')
 def delete_event(request, event_id):
     event = Event.objects.get(id=event_id)
     event.delete()
     messages.success(request, "Event deleted successfully!")
     return redirect('dashboard')
-
+@login_required(login_url='log-in')
+@permission_required(perm='event.change_event', login_url='no-permission')
 def update_event(request, event_id):
     event = Event.objects.get(id=event_id)
     if request.method == 'POST':
@@ -144,13 +155,15 @@ def update_event(request, event_id):
         return render(request, 'update.html', context)
 
 
-
+@login_required(login_url='log-in')
+@permission_required(perm='event.add_category', login_url='no-permission')
 def create_category(request):
     if request.method == "POST":
         category_form = CategoryModelForm(request.POST)
-        category_form.save()
-        messages.success(request, "Category Added Successfully!")
-        return redirect('dashboard')
+        if category_form.is_valid():
+            category_form.save()
+            messages.success(request, "Category Added Successfully!")
+            return redirect('dashboard')
     else:
         category_form = CategoryModelForm()
     context = {
@@ -158,12 +171,16 @@ def create_category(request):
     }
     return render(request, 'create.html', context)
 
+@login_required(login_url='log-in')
+@permission_required(perm='event.delete_category', login_url='no-permission')
 def delete_category(request, category_id):
     category = Category.objects.get(id=category_id)
     category.delete()
     messages.success(request, "Category deleted successfully!")
     return redirect('dashboard')
 
+@login_required(login_url='log-in')
+@permission_required(perm='event.change_category', login_url='no-permission')
 def update_category(request, category_id):
     category = Category.objects.get(id=category_id)
     if request.method == 'POST':

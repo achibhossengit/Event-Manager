@@ -10,6 +10,8 @@ def no_permission(request):
     return render(request, 'no-permission.html')
 
 # group related views
+@login_required(login_url='log-in')
+@permission_required(perm='group.add_group', login_url='no-permission')
 def create_group(request):
     group_form = GroupModelForm()
     if request.method == 'POST':
@@ -20,6 +22,8 @@ def create_group(request):
             return redirect('dashboard')
     return render(request, 'create.html', {'group_form':group_form})
 
+@login_required(login_url='sign-url')
+@permission_required(perm='group.change_group', login_url='no-permission')
 def update_group(request, group_id):
     group = Group.objects.get(id=group_id)
     group_form = GroupModelForm(instance=group)
@@ -31,20 +35,24 @@ def update_group(request, group_id):
             return redirect('dashboard')
     return render(request, 'update.html', {'group_form': group_form})
 
+@login_required(login_url='group.sign-url')
+@permission_required(perm='delete_group', login_url='no-permission')
 def delete_group(request, group_id):
     group = Group.objects.get(id=group_id)
     group.delete()
     messages.success(request, "Group Deleted Successfully!")
     return redirect('dashboard')
 
-@login_required(login_url='sign-in')
+@login_required(login_url='log-in')
+@permission_required(perm='user.delete_user', login_url='no-permission')
 def delete_user(request, user_id):
     user = User.objects.get(id=user_id)
     user.delete()
     messages.success(request, "User removed successfully!")
     return redirect('dashboard')
 
-@login_required(login_url='sign-in')
+@login_required(login_url='log-in')
+@permission_required(perm='user.change_user', login_url='no-permission')
 def update_user(request, user_id):
     user = User.objects.get(id=user_id)
     if request.method == 'POST':
@@ -59,19 +67,15 @@ def update_user(request, user_id):
             'user_form': user_form,
         }
         return render(request, 'update.html', context)
-    
-def change_role(request, user_id):
-    user = User.objects.get(id=user_id)
-    roles = Group.objects.all()
-    return render(request,'update_role.html', {'roles':roles})
 
-@login_required(login_url='sign-in')
-def user_list(request):
-    participants = User.objects.all()
+@login_required(login_url='log-in')
+@permission_required(perm='user.view-user', login_url='no-permission')
+def user_details(request, user_id):
+    user = User.objects.get(id=user_id)
     context = {
-        'participants': participants
+        'user': user 
     }
-    return render(request, 'user_list.html', context)
+    return render(request, 'user_details.html', context)
 
 # authentications
 def sign_up(request):
@@ -98,7 +102,7 @@ def log_in(request):
 
     return render(request, 'log_in.html', {'form':form})
 
-@login_required(login_url='sign-in')
+@login_required(login_url='log-in')
 def log_out(request):
     logout(request)
     return redirect('homepage')

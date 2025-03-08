@@ -34,7 +34,7 @@
         <a href="{% url 'dashboard' %}?type=users">
             <div class="flex gap-2 p-5 bg-blue-100 shadow-md text-2xl justify-center font-semibold rounded-md">
                 <div><i class="fa-regular fa-calendar-days"></i></div>
-                <h4>Participants: {{total_participants}}</h4>
+                <h4>Users: {{total_participants}}</h4>
             </div>
         </a>        
         <a href="{% url 'dashboard' %}?type=groups">
@@ -140,12 +140,12 @@
                         {% for user in users %}
                             <tr>
                                 <td class="p-2 border md:px-6 md:py-3 md:border-none text-sm text-gray-700">{{ forloop.counter }}</td>
-                                <td class="p-2 border md:px-6 md:py-3 md:border-none text-sm text-gray-700">{{ user.username }}</td>
+                                <td class="p-2 border md:px-6 md:py-3 md:border-none text-sm text-gray-700">
+                                    <a href="{% url 'user-details' user.id %}">{{ user.username }}</a>
+                                </td>
                                 <td class="p-2 border md:px-6 md:py-3 md:border-none text-sm text-gray-700">{{ user.first_name }} {{user.last_name}}</td>
                                 <td class="p-2 border md:px-6 md:py-3 md:border-none text-sm text-gray-700">{{ user.email}}</td>
-                                <td class="p-2 border md:px-6 md:py-3 md:border-none text-sm text-gray-700">
-                                    <a href="{% url 'change-role' user.id %}">{{ user.groups.first}}</a>
-                                </td>
+                                <td class="p-2 border md:px-6 md:py-3 md:border-none text-sm text-gray-700">{{ user.groups.first}}</td>
                                 <td class="p-2 border md:px-6 md:py-3 md:border-none text-sm text-gray-700">
                                     <div class="flex gap-8">
                                         <a href="{% url 'delete-user' user.id %}" type="submit" class="text-red-500 font-bold"><i class="fa-solid fa-trash"></i></a>
@@ -180,7 +180,7 @@
                                 <td class="p-2 border md:px-6 md:py-3 text-sm text-gray-700">
                                     <div class="max-h-40 overflow-y-auto ">
                                         {% for permission in group.permissions.all %}
-                                        <li>{{permission.name}}</li>
+                                        <li>{{permission.name}} | {{permission.codename}}</li>
                                     {% endfor %}
                                     </div>
                                 </td>
