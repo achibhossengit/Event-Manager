@@ -1,45 +1,45 @@
 {% comment %} Number card {% endcomment %}
-<section class="grid lg:grid-cols-3 md:grid-cols-2 sm:grid-cols-1 gap-5 py-10">
-    <a href="{% url 'dashboard' %}?type=past">
-        <div class="flex gap-2 p-5 bg-blue-100 shadow-md justify-center text-2xl font-semibold rounded-md">
+<section class="flex flex-wrap justify-center gap-5 py-10">
+    <a href="{% url 'dashboard' %}?type=past" class="">
+        <div class="w-80 flex gap-2 p-5 bg-blue-300 hover:bg-blue-400 shadow-md justify-center text-2xl font-semibold rounded-md">
             <div><i class="fa-solid fa-check"></i></div>
             <h4>Past Events: {{counts.past}}</h4>
         </div>
     </a>
     <a href="{% url 'dashboard' %}?type=today">
-        <div class="flex gap-2 p-5 bg-blue-100 shadow-md text-2xl justify-center font-semibold rounded-md">
+        <div class="w-80 flex gap-2 p-5 bg-blue-300 hover:bg-blue-400 shadow-md text-2xl justify-center font-semibold rounded-md">
             <div><i class="fa-solid fa-calendar-week"></i></div>
             <h4>Today's Events: {{counts.today}}</h4>
         </div>
     </a>
     <a href="{% url 'dashboard' %}?type=upcoming">
-        <div class="flex gap-2 p-5 bg-blue-100 shadow-md text-2xl justify-center font-semibold rounded-md">
+        <div class="w-80 flex gap-2 p-5 bg-blue-300 hover:bg-blue-400 shadow-md text-2xl justify-center font-semibold rounded-md">
             <div><i class="fa-regular fa-calendar-days"></i></div>
             <h4>Upcoming Events: {{counts.upcoming}}</h4>
         </div>
     </a>
     <a href="{% url 'dashboard' %}?type=total_events">
-        <div class="flex gap-2 p-5 bg-blue-100 shadow-md justify-center text-2xl font-semibold rounded-md">
+        <div class="w-80 flex gap-2 p-5 bg-blue-300 hover:bg-blue-400 shadow-md justify-center text-2xl font-semibold rounded-md">
             <div><i class="fa-solid fa-border-all"></i></div>
             <h4>Total Events: {{counts.total}}</h4>
         </div>
     </a>
     {% if role != 'Participant' %}
         <a href="{% url 'dashboard' %}?type=categories">
-            <div class="flex gap-2 p-5 bg-blue-100 shadow-md text-2xl justify-center font-semibold rounded-md">
+            <div class="w-80 flex gap-2 p-5 bg-blue-300 hover:bg-blue-400 shadow-md text-2xl justify-center font-semibold rounded-md">
                 <div><i class="fa-regular fa-calendar-days"></i></div>
                 <h4>Categories: {{category_count}}</h4>
             </div>
         </a>
         {% if role == 'Admin' %}
             <a href="{% url 'dashboard' %}?type=users">
-                <div class="flex gap-2 p-5 bg-blue-100 shadow-md text-2xl justify-center font-semibold rounded-md">
+                <div class="w-80 flex gap-2 p-5 bg-blue-300 hover:bg-blue-400 shadow-md text-2xl justify-center font-semibold rounded-md">
                     <div><i class="fa-regular fa-calendar-days"></i></div>
                     <h4>Users: {{total_participants}}</h4>
                 </div>
             </a>
             <a href="{% url 'dashboard' %}?type=groups">
-                <div class="flex gap-2 p-5 bg-blue-100 shadow-md text-2xl justify-center font-semibold rounded-md">
+                <div class="w-80 flex gap-2 p-5 bg-blue-300 hover:bg-blue-400 shadow-md text-2xl justify-center font-semibold rounded-md">
                     <div><i class="fa-regular fa-calendar-days"></i></div>
                     <h4>Groups: {{total_groups}}</h4>
                 </div>
