@@ -45,13 +45,15 @@
         </p>
     </div>
     {% comment %} participants {% endcomment %}
-    <div class="mt-7">
-        <h2 class="text-lg font-bold mb-3">Participants -</h2>
-        <ul class="list-disc list-inside pl-5 text-sm">
-            {% for participant in participants %}
-            <li>{{ participant.name }}</li>
-            {% endfor %}
-        </ul>
-    </div>
+    {% if participants %}
+        <div class="mt-7">
+            <h2 class="text-lg font-bold mb-3">Participants -</h2>
+            <ul class="list-disc list-inside pl-5 text-sm">
+                {% for participant in participants %}
+                <li>{{ participant.first_name}} {{participant.last_name}}</li>
+                {% endfor %}
+            </ul>
+        </div>
+    {% endif %}
 </section>
 {% endblock content %}

@@ -116,14 +116,15 @@ def dashboard(request):
 
 @login_required(login_url='log-in')
 def event_details(request, id):
-    if request.method=='POST':
-        event = Event.objects.get(id=id)
+    event = Event.objects.get(id=id)
+    participants = None
+    if is_admin(request.user):
         participants = event.participants.all()
-        context = {
-            'event':event,
-            'participants':participants
-        }
-        return render( request, 'event_details.html', context)
+    context = {
+        'event':event,
+        'participants':participants
+    }
+    return render( request, 'event_details.html', context)
 
 @login_required(login_url='log-in')
 @permission_required(perm='event.add_event', login_url='no-permission')

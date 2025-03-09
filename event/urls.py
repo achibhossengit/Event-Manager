@@ -2,7 +2,7 @@ from django.urls import path
 from event.views import dashboard, event_details, create_event, delete_event, update_event, create_category, delete_category,update_category, book_event
 urlpatterns = [
     path('dashboard/', dashboard, name='dashboard'),
-    path('event-detials/<int:id>/', event_details, name='event_details'),
+    path('event-detials/<int:id>/', event_details, name='event-details'),
     # path('management/', management, name='management'),
 
     path('create-event/', create_event, name='create-event'),

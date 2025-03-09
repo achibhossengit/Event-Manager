@@ -24,7 +24,9 @@
                         {% for event in events %}
                             <tr>
                                 <td class="p-2 border md:px-6 md:py-3 md:border-none text-sm text-gray-700">{{ forloop.counter}} </td>
-                                <td class="p-2 border md:px-6 md:py-3 md:border-none text-sm text-gray-700">{{ event.name }}</td>
+                                <td class="p-2 border md:px-6 md:py-3 md:border-none text-sm text-gray-700">
+                                    <a href="{% url 'event-details' event.id %}">{{ event.name }}</a>
+                                </td>
                                 <td class="p-2 border md:px-6 md:py-3 md:border-none text-sm text-gray-700">{{ event.date }}</td>
                                 <td class="p-2 border md:px-6 md:py-3 md:border-none text-sm text-gray-700">
                                     <div class="flex gap-8">
