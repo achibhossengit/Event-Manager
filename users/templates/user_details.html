@@ -1,13 +1,20 @@
 {% extends "header.html" %}
 {% load static %}
 {% block content %}
-    <section>
-        <div class="bg-sky-200 rounded-lg p-5">
+    <section class="flex justify-center">
+        <div class="bg-sky-200 rounded-lg p-5 w-96">
             <img class="rounded-full w-20 mb-5" src="{% static 'images/participant_img.jpg' %}" alt="">
             <p class="font-semibold">ID: {{user.id}}</p>
             <p class="font-semibold">Name: {{user.first_name}} {{user.last_name}}</p>
             <p class="font-semibold">Email: {{user.email}}</p>
             <p class="font-semibold">Role: {{user.groups.first}}</p>
+            <br>
+            <ul class="list-disc list-inside">
+                <h2 class="text-lg font-bold">Booked Events:</h2>
+                {% for event in user.rsvp_events.all %}
+                    <li>{{event.name}}</li>
+                {% endfor %}
+            </ul>
         </div>
     </section>
 {% endblock content %}

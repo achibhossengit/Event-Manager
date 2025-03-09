@@ -24,7 +24,7 @@
             <h4>Total Events: {{counts.total}}</h4>
         </div>
     </a>
-    {% if rsvp_count %}
+    {% if role == 'Participant' %}
         <a href="{% url 'dashboard' %}?type=booked_events">
             <div class="w-80 flex gap-2 p-5 bg-blue-300 hover:bg-blue-400 shadow-md justify-center text-2xl font-semibold rounded-md">
                 <div><i class="fa-solid fa-border-all"></i></div>
