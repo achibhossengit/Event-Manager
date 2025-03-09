@@ -26,8 +26,10 @@ def homepage(request):
     else:
         keyword = 'a'
     events = Event.objects.filter(Q(name__icontains=keyword)|Q(description__icontains=keyword)|Q(location__icontains=keyword))
+    role = request.user.groups.first().name
     context = {
-        'events': events
+        'events': events,
+        'role':role
     }
     return render(request, 'homepage.html', context)
         
