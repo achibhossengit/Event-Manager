@@ -157,7 +157,7 @@ def delete_event(request, event_id):
 def update_event(request, event_id):
     event = Event.objects.get(id=event_id)
     if request.method == 'POST':
-        event_form = EventModelForm(request.POST, instance=event)
+        event_form = EventModelForm(request.POST, request.FILES, instance=event)
         if event_form.is_valid():
             event_form.save()
             messages.success(request, "Event updated successfully!")

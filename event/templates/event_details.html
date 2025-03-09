@@ -3,7 +3,7 @@
 {% block content %}
 <section class="w-11/12 mx-auto md:w-2/3 shadow-2xl p-10 border border-green-100 rounded-xl">
     <div>
-        <img class="w-1/2 mx-auto rounded-lg" src="{% if event.media %}{{ event.media.url }}{% else %}{% static 'images/event-details-2.jpg' %}{% endif %}" alt="Event Image"/>
+        <img class="w-1/2 mx-auto rounded-lg" src="{% if event.media %}{{ event.media.url }}{% else %}{% static 'images/no-image.jpg' %}{% endif %}" alt="Event Image"/>
         {% comment %} <img class="w-1/2 mx-auto rounded-lg" src={{event.media.url}}> {% endcomment %}
         <h3 class="text-2xl font-bold py-3 text-center md:text-left">{{ event.name }}</h3>
         <div class="flex flex-wrap justify-between gap-4 my-7">
