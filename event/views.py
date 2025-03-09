@@ -26,7 +26,8 @@ def homepage(request):
     else:
         keyword = 'a'
     events = Event.objects.filter(Q(name__icontains=keyword)|Q(description__icontains=keyword)|Q(location__icontains=keyword))
-    role = request.user.groups.first().name
+    group = request.user.groups.first()
+    role = group.name if group else "No Role"
     context = {
         'events': events,
         'role':role
