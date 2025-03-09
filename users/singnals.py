@@ -1,7 +1,9 @@
-from django.db.models.signals import post_save
+from django.db.models.signals import post_save, pre_save
 from django.dispatch import receiver
 from django.contrib.auth.models import User, Group
 from django.core.mail import send_mail
+from django.contrib.auth.tokens import default_token_generator
+from django.conf import settings
 
 @receiver(post_save, sender=User)
 # default parameer for post_save signals: sender, instance, created, update_fields(its a tuple which contain update related info like- username, password etc), raw, **kwargs(for send custom parameters)
@@ -12,16 +14,19 @@ def assign_default_role(sender,instance, created, **kwargs):
         instance.groups.add(user_group)
         instance.save()
 
-# @receiver(post_save, sender=User)
-# def activate_user_email(sender, instance, created, **kwargs):
-#     if created:
-#         # print(vars(instance))
-#         user_email = instance.email
-        
-#         send_mail(
-#         "Subject here",
-#         "Here is the message.",
-#         "from@example.com",
-#         ["to@example.com"],
-#         fail_silently=False,
-#         )
+@receiver(post_save, sender=User)
+def user_activation_mail(sender, created, instance, **kwargs):
+    if created:
+        token = default_token_generator.make_token(instance)
+        login_url = f"{settings.FRONTEND_URL}/users/activate/{instance.id}/{token}"
+
+        # sending email
+        sub = "User Activation Email"
+        body = f"Please active your user account first to log in. Click on activation link bellow:\n{login_url}"
+        send_mail(
+            subject=sub,
+            message=body,
+            from_email='mail.achibhossen@gmail.com',
+            recipient_list=[instance.email],
+            fail_silently=False
+        )

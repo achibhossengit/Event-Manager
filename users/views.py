@@ -1,9 +1,10 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, HttpResponse
 from users.forms import UserModelForm, LogInForm, UserRoleModelForm, GroupModelForm
 from django.contrib.auth.models import User, Group
 from django.contrib import messages
 from django.contrib.auth import login, logout
 from django.contrib.auth.decorators import login_required, permission_required
+from django.contrib.auth.tokens import default_token_generator
 
 # views
 def no_permission(request):
@@ -85,9 +86,23 @@ def sign_up(request):
         if form.is_valid():
             user = form.save(commit=False) # just create an object not save in database
             user.set_password(form.cleaned_data.get('password')) # for proper hasing and set password. its so important
+            user.is_active = False
             form.save() # save in database
             return redirect('log-in')
     return render(request, 'sign_up.html', {'form':form})
+
+def active_user(request, user_id, token):
+    try:
+        user = User.objects.get(id=user_id)
+        if default_token_generator.check_token(user, token):
+            user.is_active = True
+            user.save()
+            return redirect('log-in')
+        else:
+            return HttpResponse("Invalid token or user id!")
+    except:
+        return HttpResponse("Something Went Wrong! Try again later.")
+    
 
 
 def log_in(request):
