@@ -24,6 +24,14 @@
             <h4>Total Events: {{counts.total}}</h4>
         </div>
     </a>
+    {% if rsvp_count %}
+        <a href="{% url 'dashboard' %}?type=booked_events">
+            <div class="w-80 flex gap-2 p-5 bg-blue-300 hover:bg-blue-400 shadow-md justify-center text-2xl font-semibold rounded-md">
+                <div><i class="fa-solid fa-border-all"></i></div>
+                <h4>Booked Events: {{rsvp_count}}</h4>
+            </div>
+        </a>
+    {% endif %}
     {% if role != 'Participant' %}
         <a href="{% url 'dashboard' %}?type=categories">
             <div class="w-80 flex gap-2 p-5 bg-blue-300 hover:bg-blue-400 shadow-md text-2xl justify-center font-semibold rounded-md">

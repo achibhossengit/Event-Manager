@@ -42,6 +42,7 @@ def dashboard(request):
     category_count = Category.objects.all().count()
     total_participants = User.objects.count()
     total_groups = Group.objects.count()
+    rsvp_count = request.user.rsvp_events.all().count()
 
     events = None
     categories = None
@@ -60,6 +61,12 @@ def dashboard(request):
     elif type=='past':
         events = Event.objects.filter(date__lt=date.today())
         section_title = "Past Events "
+    elif type=='booked_events':
+        if is_participant(request.user):
+            events = list(request.user.rsvp_events.all())
+            section_title = "Booked Events"
+        else:
+            return redirect('no-permission')
     elif type=='categories':
         if is_admin(request.user) or is_organizer(request.user):
             categories = Category.objects.all()
@@ -87,6 +94,7 @@ def dashboard(request):
         'total_participants':total_participants,
         'category_count':category_count,
         'total_groups': total_groups,
+        'rsvp_count': rsvp_count,
         'counts':counts,
         'users':users,
         'events':events,
