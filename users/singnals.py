@@ -1,4 +1,4 @@
-from django.db.models.signals import post_save, pre_save
+from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.contrib.auth.models import User, Group
 from django.core.mail import send_mail
@@ -24,9 +24,9 @@ def user_activation_mail(sender, created, instance, **kwargs):
         sub = "User Activation Email"
         body = f"Please active your user account first to log in. Click on activation link bellow:\n{login_url}"
         send_mail(
-            subject=sub,
-            message=body,
-            from_email='mail.achibhossen@gmail.com',
-            recipient_list=[instance.email],
-            fail_silently=False
+            subject = sub,
+            message = body,
+            from_email = settings.EMAIL_HOST_USER,
+            recipient_list = [instance.email],
+            fail_silently = True
         )
