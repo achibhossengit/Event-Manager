@@ -1,8 +1,10 @@
-from django.contrib.auth.models import User, Group
+from django.contrib.auth.models import Group
 from django.forms import ModelForm
 from event.forms import StyledFormMixin
 from django import forms
 from django.contrib.auth.forms import AuthenticationForm
+from users.models import CustomUser
+User = CustomUser
 
 class UserModelForm(StyledFormMixin, ModelForm):
     class Meta:

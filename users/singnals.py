@@ -1,9 +1,12 @@
 from django.db.models.signals import post_save
 from django.dispatch import receiver
-from django.contrib.auth.models import User, Group
+from django.contrib.auth.models import Group
 from django.core.mail import send_mail
 from django.contrib.auth.tokens import default_token_generator
 from django.conf import settings
+from users.models import CustomUser
+User = CustomUser
+
 
 @receiver(post_save, sender=User)
 # default parameer for post_save signals: sender, instance, created, update_fields(its a tuple which contain update related info like- username, password etc), raw, **kwargs(for send custom parameters)

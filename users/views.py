@@ -1,10 +1,12 @@
 from django.shortcuts import render, redirect, HttpResponse
 from users.forms import UserModelForm, LogInForm, UserRoleModelForm, GroupModelForm
-from django.contrib.auth.models import User, Group
+from django.contrib.auth.models import Group
 from django.contrib import messages
 from django.contrib.auth import login, logout
 from django.contrib.auth.decorators import login_required, permission_required
 from django.contrib.auth.tokens import default_token_generator
+from users.models import CustomUser
+User = CustomUser
 
 # views
 def no_permission(request):

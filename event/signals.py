@@ -1,9 +1,10 @@
 from django.db.models.signals import m2m_changed
 from event.models import Event
-from django.contrib.auth.models import User
+from users.models import CustomUser
 from django.dispatch import receiver
 from django.core.mail import send_mail
 from django.conf import settings
+User = CustomUser
 
 @receiver(m2m_changed, sender=Event.participants.through)
 def confirmation_mail(sender, action, instance, pk_set, **kwargs):

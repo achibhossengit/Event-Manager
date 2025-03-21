@@ -5,11 +5,13 @@ from event.models import Event, Category
 from datetime import date
 from django.db.models import Count, Q
 from django.contrib import messages
-from django.contrib.auth.models import User, Group
+from django.contrib.auth.models import Group
 from django.contrib.auth.decorators import login_required, permission_required, user_passes_test
 from django.views import View
 from django.views.generic import CreateView, UpdateView, DeleteView
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
+from users.models import CustomUser
+User = CustomUser
 
 # user checking function
 def is_admin(user):
