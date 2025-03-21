@@ -1,4 +1,5 @@
 from django.shortcuts import render, redirect
+from django.urls import reverse_lazy
 from event.forms import EventModelForm, CategoryModelForm
 from event.models import Event, Category
 from datetime import date
@@ -6,6 +7,9 @@ from django.db.models import Count, Q
 from django.contrib import messages
 from django.contrib.auth.models import User, Group
 from django.contrib.auth.decorators import login_required, permission_required, user_passes_test
+from django.views import View
+from django.views.generic import CreateView, UpdateView, DeleteView
+from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 
 # user checking function
 def is_admin(user):
@@ -129,70 +133,64 @@ def event_details(request, id):
     }
     return render( request, 'event_details.html', context)
 
-@login_required(login_url='log-in')
-@permission_required(perm='event.add_event', login_url='no-permission')
-def create_event(request):
-    if request.method == 'POST':
-        event_form = EventModelForm(request.POST, request.FILES)
-        if event_form.is_valid():
-            event_form.save()
-            messages.success(request, "Event created Successfully!")
-            return redirect('dashboard')
-    else:
-        event_form = EventModelForm()
-    context = {
-        'event_form': event_form
-    }
-    return render(request, 'create.html', context)
 
-@login_required(login_url='log-in')
-@permission_required(perm='event.delete_event', login_url='no-permission')
-def delete_event(request, event_id):
-    event = Event.objects.get(id=event_id)
-    event.delete()
-    messages.success(request, "Event deleted successfully!")
-    return redirect('dashboard')
-@login_required(login_url='log-in')
-@permission_required(perm='event.change_event', login_url='no-permission')
-def update_event(request, event_id):
-    event = Event.objects.get(id=event_id)
-    if request.method == 'POST':
-        event_form = EventModelForm(request.POST, request.FILES, instance=event)
-        if event_form.is_valid():
-            event_form.save()
-            messages.success(request, "Event updated successfully!")
-            return redirect('dashboard')
-    else:
-        event_form = EventModelForm(instance=event)
-        context = {
-            'event_form':event_form
-        }
-        return render(request, 'update.html', context)
+class CreateEvent(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
+    permission_required = 'event.add_event'
+    login_url = 'log-in'
+    model = Event
+    form_class = EventModelForm
+    template_name = 'create.html'
+    success_url = reverse_lazy('dashboard')
+
+    def form_valid(self, form):
+        messages.success(self.request, "Event was created Successfully!")
+        return super().form_valid(form)
 
 
-@login_required(login_url='log-in')
-@permission_required(perm='event.add_category', login_url='no-permission')
-def create_category(request):
-    if request.method == "POST":
-        category_form = CategoryModelForm(request.POST)
-        if category_form.is_valid():
-            category_form.save()
-            messages.success(request, "Category Added Successfully!")
-            return redirect('dashboard')
-    else:
-        category_form = CategoryModelForm()
-    context = {
-        'category_form': category_form
-    }
-    return render(request, 'create.html', context)
+class DeleteEvent(LoginRequiredMixin, PermissionRequiredMixin, View):
+    permission_required = 'event.delete_event'
+    login_url = 'log-in'
+    def get(self, request, event_id):
+        event = Event.objects.get(id=event_id)
+        event.delete()
+        messages.success(request, "Event was deleted successfully!")
+        return redirect('dashboard')
 
-@login_required(login_url='log-in')
-@permission_required(perm='event.delete_category', login_url='no-permission')
-def delete_category(request, category_id):
-    category = Category.objects.get(id=category_id)
-    category.delete()
-    messages.success(request, "Category deleted successfully!")
-    return redirect('dashboard')
+
+class UpdateEvent(LoginRequiredMixin, PermissionRequiredMixin, UpdateView):
+    permission_required = 'event.change_event'
+    login_url = 'log-in'
+    model = Event
+    form_class = EventModelForm
+    template_name = 'update.html'
+    success_url = reverse_lazy('dashboard')
+    pk_url_kwarg = 'event_id'
+
+    def form_valid(self, form):
+        messages.success(self.request, "Event was updated successfully!")
+        return super().form_valid(form)
+
+class CreateCategory(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
+    permission_required = 'event.add_category'
+    login_url = 'log-in'
+    model = Category
+    form_class = CategoryModelForm
+    template_name = 'create.html'
+    success_url = reverse_lazy('dashboard')
+
+    def form_valid(self, form):
+        messages.success(self.request, "A new category was successfully created!")
+        return super().form_valid(form)
+
+class DeleteCategory(LoginRequiredMixin, PermissionRequiredMixin, View):
+    login_url = 'log-in'
+    permission_required = 'event.delete_category'
+    def post(self, request, *args, **kwargs):
+        category_id = kwargs.get('category_id')
+        category = Category.objects.get(id=category_id)
+        category.delete()
+        messages.success(self.request, "Category was deleted successfully!" )
+        return redirect('dashboard')
 
 @login_required(login_url='log-in')
 @permission_required(perm='event.change_category', login_url='no-permission')

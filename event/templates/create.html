@@ -2,14 +2,8 @@
 {% block content %}
     <section class="w-full md:w-1/2 md:mx-auto shadow-md p-5 ">
         <form action="" method="POST" enctype="multipart/form-data">
-            {% if event_form %}
-                    {{event_form.as_p}}
-            {% elif category_form %}
-                    {{category_form.as_p}}
-            {% elif participant_form %}
-                {{participant_form.as_p}}
-            {% elif group_form %}
-                {{group_form.as_p}}
+            {% if form %}
+                    {{form.as_p}}
             {% endif %}
 
             {% csrf_token %}
