@@ -1,0 +1,51 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'css/output.css' %}">
+    <script src="https://kit.fontawesome.com/aa3a5bcb91.js" crossorigin="anonymous"></script>
+    <title>Event Manager</title>
+</head>
+<body>
+    <header class="bg-green-100">
+        {% if request.user.is_authenticated %}
+            {% include "loged_nav.html" %}
+        {% else %}
+            {% include "non_loged_nav.html" %}
+        {% endif %}
+        <script>
+            document
+            .getElementById("menu-toggle")
+            .addEventListener("click", function () {
+                document.getElementById("mobile-menu").classList.toggle("hidden");
+            });
+        
+            document
+            .getElementById("user-menu-button")
+            .addEventListener("click", function () {
+                document.getElementById("user-menu").classList.toggle("hidden");
+            });
+        
+            // Close the dropdown when clicking outside
+            window.addEventListener("click", function (e) {
+            if (!document.getElementById("user-menu-button").contains(e.target)) {
+                document.getElementById("user-menu").classList.add("hidden");
+            }
+            });
+        </script>
+    </header>
+    <main class="min-h-screen bg-green-50 p-5">
+        <section class="max-w-[1450px] mx-auto">
+            {% block content %}
+            
+            {% endblock content %}
+        </section>
+        
+    </main>
+    <footer>
+        {% include "footer.html" %}
+    </footer>
+</body>
+</html>

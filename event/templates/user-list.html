@@ -1,0 +1,40 @@
+<div class="bg-white rounded-lg shadow-lg p-6">
+    <h2 class="text-3xl font-bold text-center text-gray-800 mb-6">{{ section_title }}</h2>
+    <div class="overflow-x-auto">
+        <table class="w-full border-collapse">
+            <thead>
+                <tr class="bg-gray-100 text-gray-600">
+                    <th class="p-3 text-left text-sm font-semibold">#</th>
+                    <th class="p-3 text-left text-sm font-semibold">Username</th>
+                    <th class="p-3 text-left text-sm font-semibold">Name</th>
+                    <th class="p-3 text-left text-sm font-semibold">Email</th>
+                    <th class="p-3 text-left text-sm font-semibold">Role</th>
+                    <th class="p-3 text-center text-sm font-semibold">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for user in users %}
+                    <tr class="border-b hover:bg-gray-50 transition duration-200">
+                        <td class="p-3 text-sm text-gray-700">{{ forloop.counter }}</td>
+                        <td class="p-3 text-sm text-gray-700">
+                            <a href="{% url 'user-details' user.id %}" class="text-blue-600 hover:text-blue-800">{{ user.username }}</a>
+                        </td>
+                        <td class="p-3 text-sm text-gray-700">{{ user.first_name }} {{ user.last_name }}</td>
+                        <td class="p-3 text-sm text-gray-700">{{ user.email }}</td>
+                        <td class="p-3 text-sm text-gray-700">{{ user.groups.first }}</td>
+                        <td class="p-3 text-sm text-gray-700">
+                            <div class="flex justify-center space-x-4">
+                                <a href="{% url 'delete-user' user.id %}" class="text-red-500 hover:text-red-700">
+                                    <i class="fas fa-trash-alt"></i>
+                                </a>
+                                <a href="{% url 'update-user' user.id %}" class="text-green-500 hover:text-green-700">
+                                    <i class="fas fa-edit"></i>
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>

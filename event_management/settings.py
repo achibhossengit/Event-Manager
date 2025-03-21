@@ -29,8 +29,9 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'event',
-    'debug_toolbar',
     'users',
+    'core',
+    'debug_toolbar',
 ]
 
 MIDDLEWARE = [
@@ -76,25 +77,25 @@ WSGI_APPLICATION = 'event_management.wsgi.application'
 # }
 
 # for postgrees sql
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.postgresql',
-#         'NAME': 'event_manager_db',
-#         'USER': 'postgres',
-#         'PASSWORD': 'hello@postgre',
-#         'HOST': 'localhost',
-#         'PORT': '5432',
-#     }
-# }
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'event-manager-DB',
+        'USER': 'postgres',
+        'PASSWORD': 'hello@postgres',
+        'HOST': 'localhost',
+        'PORT': '5432',
+    }
+}
 
 # for deploy on render
-DATABASES = {
-    'default': dj_database_url.config(
-        # Replace this value with your local database's connection string.
-        default = config('DATABASE_URL'),
-        conn_max_age = 600
-    )
-}
+# DATABASES = {
+#     'default': dj_database_url.config(
+#         # Replace this value with your local database's connection string.
+#         default = config('DATABASE_URL'),
+#         conn_max_age = 600
+#     )
+# }
 
 
 # Password validation

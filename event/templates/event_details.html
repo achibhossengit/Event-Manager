@@ -1,4 +1,4 @@
-{% extends "header.html" %}
+{% extends "base.html" %}
 {% load static %}
 {% block content %}
 <section class="w-11/12 mx-auto md:w-2/3 shadow-2xl p-10 border border-green-100 rounded-xl">
@@ -55,5 +55,10 @@
             </ul>
         </div>
     {% endif %}
+    <div class="mt-5">
+        <button class="px-5 py-2 bg-green-600 hover:bg-green-700 font-bold text-white rounded-md">Edit Event</button>
+        <button class="px-5 py-2 bg-green-600 hover:bg-green-700 font-bold text-white rounded-md">Book Now</button>
+        <button class="px-5 py-2 bg-red-600 hover:bg-red-700 font-bold text-white rounded-md">Delete</button>
+    </div>
 </section>
 {% endblock content %}

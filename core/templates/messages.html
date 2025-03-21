@@ -1,0 +1,15 @@
+{% comment %} Messages Section {% endcomment %}
+<section class="pt-5">
+    {% if messages %}
+        {% for message in messages %}
+            <div class="flex justify-center">
+                <div class="w-full max-w-2xl px-4">
+                    <div class="p-4 rounded-lg shadow-md text-center 
+                                {% if message.tags == 'success' %}bg-green-100 text-green-700
+                                {% elif message.tags == 'error' %}bg-red-100 text-red-700{% endif %}">
+                        <p class="text-xl font-semibold">{{ message }}</p>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    {% endif %}
