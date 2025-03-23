@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #ebebeb;
+            margin: 0;
+            padding: 0;
+            color: black;
+        }
+        .email-container {
+            max-width: 600px;
+            margin: 20px auto;
+            background: white;
+            padding: 20px;
+            border: 1px solid #dddddd;
+            border-radius: 5px;
+        }
+        .email-header {
+            text-align: center;
+            font-size: 24px;
+            color: blue;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+        .email-body {
+            font-size: 16px;
+            line-height: 1.6;
+        }
+        .reset-button {
+            display: inline-block;
+            background-color: blue;
+            color: white;
+            padding: 10px 20px;
+            text-decoration: none;
+            border-radius: 5px;
+            font-size: 16px;
+            margin-top: 20px;
+            font-weight: bold;
+        }
+        .reset-button:hover {
+            background-color: skyblue;
+        }
+        .email-footer {
+            font-size: 12px;
+            color: #777777;
+            text-align: center;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="email-container">
+        <div class="email-header">
+            Password Reset Request
+        </div>
+        <hr>
+        <div class="email-body">
+            <p>Hello,</p>
+            <p>You requested to reset your password. Please click the button below to proceed:</p>
+            <a href="{{protocol}}://{{domain}}/{% url 'password_reset_confirm' uidb64=uid token=token %}" class="reset-button">Reset Password</a>
+            <p>If you didn’t request this, please ignore this email or contact support.</p>
+            <p>Thank you,</p>
+            <p>Event Manager Support Team</p>
+        </div>
+        <div class="email-footer">
+            &copy; 2025 Event manager. All rights reserved.
+        </div>
+    </div>
+</body>
+</html>

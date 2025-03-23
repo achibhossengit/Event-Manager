@@ -1,11 +1,19 @@
 from django.shortcuts import render, redirect, HttpResponse
-from users.forms import UserModelForm, LogInForm, UserRoleModelForm, GroupModelForm
+from django.contrib.auth.forms import PasswordChangeForm
+from users.forms import UserModelForm, LogInForm, UserRoleModelForm, GroupModelForm, EditProfileForm, ChangePasswordForm, CustomPasswordResetForm, CustomPasswordConfirmForm
 from django.contrib.auth.models import Group
 from django.contrib import messages
 from django.contrib.auth import login, logout
 from django.contrib.auth.decorators import login_required, permission_required
 from django.contrib.auth.tokens import default_token_generator
 from users.models import CustomUser
+from django.views import View
+from django.views.generic import UpdateView
+from django.urls import reverse_lazy
+from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
+from django.contrib.auth import update_session_auth_hash
+from django.contrib.auth.views import PasswordResetView, PasswordResetConfirmView
+
 User = CustomUser
 
 # views
@@ -123,3 +131,110 @@ def log_in(request):
 def log_out(request):
     logout(request)
     return redirect('log-in')
+
+
+
+class ProfileView(LoginRequiredMixin, View):
+    login_url = 'log-in'
+    def get(self, request):
+        user = request.user
+        context = {
+            'username': user.username,
+            'name':f"{user.first_name} {user.last_name}",
+            'role':user.groups.first().name,
+            'email':user.email,
+            'phone':user.phone_number,
+            'member_since':user.date_joined,
+            'last_login':user.last_login,
+            'profile_img':user.profile_img.url if user.profile_img else None,
+            'type': 'view_profile'
+        }
+        return render(request, 'accounts/profile.html', context)
+    
+class EditProfile(LoginRequiredMixin, UpdateView):
+    login_url = 'log-in'
+    model = CustomUser
+    form_class = EditProfileForm
+    template_name = 'accounts/profile.html'
+    success_url = reverse_lazy('user-profile')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['type'] ='edit_profile'
+        return context
+
+    def get_object(self, queryset = None):
+        obj = self.request.user
+        return obj
+    
+    def form_valid(self, form):
+        messages.success(self.request, "Your profile has been updated successfully!")
+        return super().form_valid(form)
+    
+    
+class ChangePassword(LoginRequiredMixin, View):
+    login_url = 'log-in'
+    def get(self, request):
+        form = ChangePasswordForm()
+        context = {
+            'type': 'change_password',
+            'form': form
+        }
+        return render(request, 'accounts/profile.html', context)
+    
+    def post(self, request, **kwargs):
+        form = ChangePasswordForm(request.POST)
+        if form.is_valid():
+            old_password = form.cleaned_data.get('old_password')
+            new_password = form.cleaned_data.get('new_password')
+            confirm_password = form.cleaned_data.get('confirm_password')
+            
+            if not request.user.check_password(old_password):
+                messages.error(request, "Your old password is incorrect.")
+                return redirect('change-password')
+
+            if new_password != confirm_password:
+                messages.error(request, "New password and confirm password do not match.")
+                return redirect('change-password')
+            
+            if old_password == new_password:
+                messages.error(request, "New password cannot be the same as the old password.")
+                return redirect('change-password')
+                
+
+            request.user.set_password(new_password)
+            request.user.save()
+            update_session_auth_hash(request, request.user)
+            messages.success(request, "Your password has been updated successfully!")
+            return redirect('user-profile')
+        else:
+            messages.error(request, "Your Form is invalid!")
+            return redirect('change-password')
+        
+
+class CustomPasswordReset(PasswordResetView):
+    model = User
+    template_name = 'registration/form.html'
+    form_class = CustomPasswordResetForm
+    success_url = reverse_lazy('log-in')
+    html_email_template_name = 'registration/email_template.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['protocol'] = 'https' if self.request.is_secure() else 'http'
+        context['domain'] = self.request.get_host()
+        return context
+    
+    def form_valid(self, form):
+        messages.success(self.request, 'A password reset link has been sent to your email address. Please check your inbox to reset your password.')
+        return super().form_valid(form)
+    
+
+class CustomPasswordResetConfirmView(PasswordResetConfirmView):
+    form_class = CustomPasswordConfirmForm
+    template_name = 'registration/form.html'
+    success_url = reverse_lazy('log-in')
+    
+    def form_valid(self, form):
+        messages.success(self.request, 'Your password was changed successfully! Now try to log in with new password.')
+        return super().form_valid(form)

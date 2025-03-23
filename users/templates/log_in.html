@@ -4,5 +4,6 @@
         {% csrf_token %}
         {{form.as_p}}
         <button type="submit" class="mt-5 text-white font-semibold bg-green-600 px-5 py-2 rounded-md">Log In</button>
+        <a class="mt-5 text-white font-semibold bg-green-600 px-5 py-2 rounded-md" href="{% url 'reset-password' %}">Forgot Password?</a>
     </form>
 {% endblock content %}  

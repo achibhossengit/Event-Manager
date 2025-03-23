@@ -1,0 +1,90 @@
+{% extends "base.html" %}
+{% block content %}
+    {% load static %}
+    <div class="flex min-h-screen">
+        <!-- Sidebar -->
+        <aside class="w-64 bg-white shadow-md">
+        <div class="p-4">
+            <h2 class="text-xl font-semibold text-gray-800">Menu</h2>
+        </div>
+        <nav class="mt-6">
+            <a
+            href="{% url 'user-profile' %}"
+            class="block py-2 px-4 {% if type == 'view_profile' %}bg-gray-200{% endif %} text-gray-700  hover:bg-gray-100"
+            >Profile</a
+            >
+            <a href="{% url 'edit-profile' %}" 
+            class="block py-2 px-4 {% if type == 'edit_profile' %}bg-gray-200{% endif %} text-gray-700 hover:bg-gray-100"
+            >Edit Profile</a
+            >
+            <a href="{% url "change-password" %}"
+            class="block py-2 px-4 {% if type == 'change_password' %}bg-gray-200{% endif %} text-gray-700 hover:bg-gray-100"
+            >Change Password</a
+            >
+        </nav>
+        </aside>
+
+        {% if type == 'view_profile' %}
+            {% comment %} profile content {% endcomment %}
+            <div class="flex-1 p-8">
+                <h1 class="text-3xl font-bold text-gray-800 mb-8">User Profile</h1>
+
+                <div class="bg-white shadow-md rounded-lg p-6">
+                    <div class="flex gap-5 items-center mb-6">
+                        <img
+                        {% if profile_img %}
+                            src="{{profile_img}}"
+                        {% else %}
+                            src="{% static 'images/avatar.png' %}"
+                        {% endif %}
+                        alt="User avatar"
+                        class="w-20 h-20 rounded-full"
+                        />
+                        <div>
+                            <h2 class="text-2xl font-semibold text-gray-800">{{name}}</h2>
+                            <p class="text-gray-600">{{role}}</p>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <h3 class="text-lg font-semibold text-gray-700 mb-2">
+                            Personal Information
+                            </h3>
+                            <p class="text-gray-600">
+                            <span class="font-medium">Phone:</span> {{phone}}
+                            </p>
+                            <p class="text-gray-600">
+                            <span class="font-medium">Email:</span> {{email}}
+                            </p>
+                            <p class="text-gray-600">
+                            <span class="font-medium">Username:</span> {{username}}
+                            </p>
+                            <p class="text-gray-600">
+                            <span class="font-medium">Location:</span> New York, USA
+                            </p>
+                        </div>
+                        <div>
+                            <h3 class="text-lg font-semibold text-gray-700 mb-2">
+                            Account Information
+                            </h3>
+                            <p class="text-gray-600">
+                            <span class="font-medium">Member Since:</span> {{member_since}}
+                            </p>
+                            <p class="text-gray-600">
+                            <span class="font-medium">Last Login:</span> {{last_login}}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% else %}
+            {% comment %} edit profile {% endcomment %}
+            <form method="POST" enctype="multipart/form-data" class="w-full md:w-1/2 pl-8 pt-20">
+                {% csrf_token %}
+                {{form.as_p}}
+                <button type="submit" class="mt-5 bg-green-600 px-5 py-2 rounded-md text-white font-semibold"><i class="fa-solid fa-clipboard"></i> Update Now</button>
+            </form>
+        {% endif %}
+    </div>
+{% endblock content %}
