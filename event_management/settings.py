@@ -154,7 +154,8 @@ MEDIA_ROOT = BASE_DIR / 'media'
 
 
 # email configarations
-FRONTEND_URL = 'http://127.0.0.1:8000'
+# FRONTEND_URL = 'http://127.0.0.1:8000'
+FRONTEND_URL = 'https://event-manager-xwyq.onrender.com'
 EMAIL_BACKEND = config('EMAIL_BACKEND')
 EMAIL_HOST = config('EMAIL_HOST')
 EMAIL_USE_TLS = config('EMAIL_USE_TLS')
