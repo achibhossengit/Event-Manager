@@ -75,7 +75,7 @@ def update_user(request, user_id):
     else:
         user_form = UserRoleModelForm(instance=user)
         context={
-            'user_form': user_form,
+            'form': user_form,
         }
         return render(request, 'update.html', context)
 
