@@ -1,12 +1,14 @@
 <section>
     <div>
-        <img class="w-full h-80 rounded-lg" src="../../static/images/banner.webp" alt="">
+        <img class="w-full h-80 rounded-lg" src="../../static/images/banner.webp" alt="Banner Image">
     </div>
-    <div class="flex justify-center mt-5 ">
-        <form action="" method="POST" class="">
+    <div class="flex justify-center mt-6">
+        <form action="" method="POST" class="flex items-center space-x-4">
             {% csrf_token %}
-            <input type="text" name="keyword" id="" placeholder="Search by keyword" class="p-2 border-2 border-gray-300 rounded-md">
-            <button type="submit" class="bg-green-600 px-5 py-2 rounded-md text-white font-semibold"><i class="fa-solid fa-magnifying-glass"></i> <span class="hidden sm:inline">SEARCH NOW</span></button>
+            <input type="text" name="keyword" id="" placeholder="Search by keyword" class="p-3 border-2 border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-600 focus:border-transparent transition duration-300 w-full sm:w-80">
+            <button type="submit" class="bg-green-600 hover:bg-green-700 px-5 py-3 rounded-md text-white font-semibold transition duration-300">
+                <i class="fa-solid fa-magnifying-glass"></i> <span class="hidden sm:inline">SEARCH NOW</span>
+            </button>
         </form>
     </div>
 </section>

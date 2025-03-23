@@ -1,35 +1,29 @@
 <div class="bg-white rounded-lg shadow-lg p-6">
-    <h2 class="text-3xl font-bold text-center text-gray-800 mb-6">{{ section_title }}</h2>
-    <a href="{% url 'create-event' %}" class="mb-6 block w-full text-center bg-green-600 hover:bg-green-700 px-5 py-3 rounded-md text-white font-semibold transition duration-300">
-        <i class="fas fa-calendar-plus mr-2"></i> Create New Event
-    </a>
-    <div class="overflow-x-auto">
+    <h2 class="text-3xl font-bold text-center text-gray-800 bg-purple-100 py-3 border-t-4 border-l-4 border-r-4 border-purple-500 rounded-t-lg">
+        {{ section_title }}
+    </h2>
+    <div class="overflow-x-auto border-l-4 border-r-4 border-purple-500 rounded-b-lg">
         <table class="w-full border-collapse">
             <thead>
                 <tr class="bg-gray-100 text-gray-600">
                     <th class="p-3 text-left text-sm font-semibold">#</th>
                     <th class="p-3 text-left text-sm font-semibold">Event Name</th>
                     <th class="p-3 text-left text-sm font-semibold">Date</th>
-                    <th class="p-3 text-center text-sm font-semibold">Actions</th>
+                    <th class="p-3 text-center text-sm font-semibold">Remove</th>
                 </tr>
             </thead>
             <tbody>
                 {% for event in events %}
                     <tr class="border-b hover:bg-gray-50 transition duration-200">
                         <td class="p-3 text-sm text-gray-700">{{ forloop.counter }}</td>
-                        <td class="p-3 text-sm text-gray-700">
-                            <a href="{% url 'event-details' event.id %}" class="text-blue-600 hover:text-blue-800">{{ event.name }}</a>
+                        <td>
+                            <a href="{% url 'event-details' event.id %}" class="p-3 text-sm text-gray-700 hover:text-blue-800">{{ event.name }}</a>
                         </td>
                         <td class="p-3 text-sm text-gray-700">{{ event.date }}</td>
-                        <td class="p-3 text-sm text-gray-700">
-                            <div class="flex justify-center space-x-4">
+                        <td class="p-3 text-sm text-center text-gray-700">
                                 <a href="{% url 'delete-event' event.id %}" class="text-red-500 hover:text-red-700">
                                     <i class="fas fa-trash-alt"></i>
                                 </a>
-                                <a href="{% url 'update-event' event.id %}" class="text-green-500 hover:text-green-700">
-                                    <i class="fas fa-edit"></i>
-                                </a>
-                            </div>
                         </td>
                     </tr>
                 {% endfor %}

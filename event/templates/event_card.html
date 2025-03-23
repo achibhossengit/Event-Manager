@@ -1,21 +1,23 @@
 <section>
-    <h2 class="text-2xl text-center font-bold py-5 underline"> {{section_title}} </h2>
+    <h2 class="text-2xl text-center font-bold py-5 underline">{{ section_title }}</h2>
     <div class="grid gap-5 lg:grid-cols-3 md:grid-cols-2 sm:grid-cols-1">
         {% for event in events %}
             {% comment %} event {% endcomment %}
             <div class="bg-blue-100 shadow-sm rounded-md p-5 space-y-3 leading-relaxed">
-                <h3 class="text-2xl font-bold">{{event.name}}</h3>
-                <p> {{event.description}} </p>
+                <h3 class="text-2xl font-bold">{{ event.name }}</h3>
+                <p>{{ event.description }}</p>
                 <div>
-                    <p class="font-semibold">Date: {{event.date}} </p>
-                    <p class="font-semibold">Locations: {{event.location}} </p>
+                    <p class="font-semibold">Date: {{ event.date }}</p>
+                    <p class="font-semibold">Location: {{ event.location }}</p>
                 </div>
                 <div class="flex justify-between">
-                    <a href="{% url 'event-details' event.id %}" type="submit" class="mt-5 text-white font-semibold bg-green-600 px-5 py-2 rounded-md">Show Details</a>
-                    {% if role == 'Admin' or role == 'Organizer' %}
-                        <a href="{% url 'delete-event' event.id %}" class="mt-5 text-white hover:bg-red-600 font-semibold bg-red-500 px-5 py-2 rounded-md">Delete</a>
-                    {% else %}
-                        <a href="{% url 'book-event' event.id %}" class="mt-5 text-white hover:bg-red-600 font-semibold bg-red-500 px-5 py-2 rounded-md">RSVP</a>
+                    <a href="{% url 'event-details' event.id %}" class="mt-5 px-5 py-2 font-semibold text-white bg-green-600 rounded-md shadow-md transition duration-300 transform hover:bg-green-700 hover:shadow-lg hover:scale-105 focus:outline-none focus:ring-2 focus:ring-green-400">
+                        Show Details
+                    </a>
+                    {% if role == 'Participant' %}
+                        <a href="{% url 'book-event' event.id %}" class="mt-5 px-5 py-2 font-semibold text-white bg-red-500 rounded-md shadow-md transition duration-300 transform hover:bg-red-600 hover:shadow-lg hover:scale-105 focus:outline-none focus:ring-2 focus:ring-red-400">
+                            Book Now
+                        </a>
                     {% endif %}
                 </div>
             </div>

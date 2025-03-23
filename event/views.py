@@ -207,7 +207,7 @@ def update_category(request, category_id):
     else:
         category_form = CategoryModelForm(instance=category)
         context = {
-            'category_form': category_form
+            'form': category_form
         }
         return render(request, 'update.html', context)
     return redirect('dashboard')

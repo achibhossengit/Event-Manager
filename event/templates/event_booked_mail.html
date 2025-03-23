@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f7;
+        }
+        .email-container {
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: #ffffff;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+        .email-header {
+            background-color: #007bff;
+            color: #ffffff;
+            text-align: center;
+            padding: 20px;
+        }
+        .email-header h2 {
+            margin: 0;
+        }
+        .email-body {
+            padding: 20px;
+            color: #333333;
+        }
+        .email-body ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        .email-body ul li {
+            margin-bottom: 10px;
+        }
+        .email-body ul li strong {
+            color: #007bff;
+        }
+        .email-footer {
+            text-align: center;
+            padding: 10px;
+            background-color: #f4f4f7;
+            color: #777777;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <div class="email-container">
+        <!-- Header -->
+        <div class="email-header">
+            <h2>Event Confirmation</h2>
+        </div>
+
+        <!-- Body -->
+        <div class="email-body">
+            <p>Dear {{ user.username }},</p>
+            <p>Thank you for booking the event. Below are the details:</p>
+            <ul>
+                <li><strong>Event Name:</strong> {{ event.name }}</li>
+                <li><strong>Description:</strong> {{ event.description }}</li>
+                <li><strong>Date:</strong> {{ event.date }}</li>
+                <li><strong>Time:</strong> {{ event.time }}</li>
+            </ul>
+            <p>We hope to see you on time!</p>
+        </div>
+
+        <!-- Footer -->
+        <div class="email-footer">
+            <p>Best regards,<br>Event Management Team</p>
+        </div>
+    </div>
+</body>
+</html>

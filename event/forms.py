@@ -3,7 +3,7 @@ from event.models import Event, Category
 
 """ Mixins """
 class StyledFormMixin:
-    default_classes = 'border-2 bg-gray-200 rounded-lg p-3'
+    default_classes = 'border-2 bg-gray-200 rounded-lg p-3 focus:outline-none'
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)  # Call the parent's __init__ method
@@ -11,28 +11,27 @@ class StyledFormMixin:
 
     def apply_default_classes(self):
         for field_name, field in self.fields.items():
-            if isinstance(field.widget, forms.TextInput) or isinstance(field.widget, forms.EmailInput) or isinstance(field.widget, forms.PasswordInput):
+            if isinstance(field.widget, forms.TimeInput):
                 field.widget.attrs.update({
-                    'class':f'{self.default_classes} w-full',
-                    'placeholder': f'Enter {field.label}'
-                })
-            elif isinstance(field.widget, forms.SelectDateWidget):
-                field.widget.attrs.update({
-                    'class': f'{self.default_classes} mt-3'
+                    'class':f'{self.default_classes} mt-3',
+                    'placeholder':'HH:MM:SS'
                 })
             elif isinstance(field.widget, forms.CheckboxSelectMultiple):
                 field.widget.attrs.update({
-                    'class': 'mb-3 max-h-40 overflow-y-auto'
+                    'class': 'max-h-40 overflow-y-auto mb-5'
                 })
-            elif isinstance(field.widget, forms.TimeInput):
-                # its not working. Debug later
+            elif isinstance(field.widget, forms.SelectDateWidget):
                 field.widget.attrs.update({
-                    'class':f'{self.default_classes}',
-                    'placeholder':'HH:MM:SS'
+                    'class': f'bg-gray-200 p-3 mt-3'
                 })
             elif isinstance(field.widget, forms.Select):
                 field.widget.attrs.update({
-                    'class':f'{self.default_classes} mt-3',
+                    'class':f'{self.default_classes} mt-3 mb-3',
+                })
+            elif isinstance(field.widget, forms.TextInput) or isinstance(field.widget, forms.EmailInput) or isinstance(field.widget, forms.PasswordInput):
+                field.widget.attrs.update({
+                    'class':f'{self.default_classes} w-full',
+                    'placeholder': f'Enter {field.label}'
                 })
             
             
@@ -43,6 +42,10 @@ class EventModelForm(StyledFormMixin, forms.ModelForm):
         widgets ={
             'date':forms.SelectDateWidget,
             'time':forms.TimeInput,
+            'media': forms.ClearableFileInput(attrs={
+                'class': 'border-2 bg-gray-200 rounded-lg p-3 focus:outline-none w-full',
+                'accept': 'image/*',  # Only allow image files
+            })
         }
 
 class CategoryModelForm(StyledFormMixin, forms.ModelForm):
