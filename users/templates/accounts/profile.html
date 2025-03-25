@@ -1,90 +1,152 @@
 {% extends "base.html" %}
 {% block content %}
     {% load static %}
-    <div class="flex min-h-screen">
-        <!-- Sidebar -->
-        <aside class="w-64 bg-white shadow-md">
-        <div class="p-4">
-            <h2 class="text-xl font-semibold text-gray-800">Menu</h2>
-        </div>
-        <nav class="mt-6">
-            <a
-            href="{% url 'user-profile' %}"
-            class="block py-2 px-4 {% if type == 'view_profile' %}bg-gray-200{% endif %} text-gray-700  hover:bg-gray-100"
-            >Profile</a
-            >
-            <a href="{% url 'edit-profile' %}" 
-            class="block py-2 px-4 {% if type == 'edit_profile' %}bg-gray-200{% endif %} text-gray-700 hover:bg-gray-100"
-            >Edit Profile</a
-            >
-            <a href="{% url "change-password" %}"
-            class="block py-2 px-4 {% if type == 'change_password' %}bg-gray-200{% endif %} text-gray-700 hover:bg-gray-100"
-            >Change Password</a
-            >
-        </nav>
-        </aside>
-
-        {% if type == 'view_profile' %}
-            {% comment %} profile content {% endcomment %}
-            <div class="flex-1 p-8">
-                <h1 class="text-3xl font-bold text-gray-800 mb-8">User Profile</h1>
-
-                <div class="bg-white shadow-md rounded-lg p-6">
-                    <div class="flex gap-5 items-center mb-6">
-                        <img
-                        {% if profile_img %}
-                            src="{{profile_img}}"
-                        {% else %}
-                            src="{% static 'images/avatar.png' %}"
-                        {% endif %}
-                        alt="User avatar"
-                        class="w-20 h-20 rounded-full"
-                        />
-                        <div>
-                            <h2 class="text-2xl font-semibold text-gray-800">{{name}}</h2>
-                            <p class="text-gray-600">{{role}}</p>
-                        </div>
-                    </div>
-
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div>
-                            <h3 class="text-lg font-semibold text-gray-700 mb-2">
-                            Personal Information
-                            </h3>
-                            <p class="text-gray-600">
-                            <span class="font-medium">Phone:</span> {{phone}}
-                            </p>
-                            <p class="text-gray-600">
-                            <span class="font-medium">Email:</span> {{email}}
-                            </p>
-                            <p class="text-gray-600">
-                            <span class="font-medium">Username:</span> {{username}}
-                            </p>
-                            <p class="text-gray-600">
-                            <span class="font-medium">Location:</span> New York, USA
-                            </p>
-                        </div>
-                        <div>
-                            <h3 class="text-lg font-semibold text-gray-700 mb-2">
-                            Account Information
-                            </h3>
-                            <p class="text-gray-600">
-                            <span class="font-medium">Member Since:</span> {{member_since}}
-                            </p>
-                            <p class="text-gray-600">
-                            <span class="font-medium">Last Login:</span> {{last_login}}
-                            </p>
-                        </div>
-                    </div>
-                </div>
+    <div class="min-h-screen bg-gray-50">
+        <!-- Mobile Header -->
+        <div class="md:hidden p-4 bg-white shadow-sm sticky top-0 z-20">
+            <div class="flex justify-between items-center">
+                <h1 class="text-xl font-semibold text-gray-800">User Profile</h1>
+                <button id="profile_menu_toggle" class="text-gray-700 focus:outline-none">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                    </svg>
+                </button>
             </div>
-        {% else %}
-            {% comment %} edit profile {% endcomment %}
-            <form method="POST" enctype="multipart/form-data" class="w-full md:w-1/2 pl-8 pt-20">
-                {% csrf_token %}
-                {{form.as_p}}
-                <button type="submit" class="mt-5 bg-green-600 px-5 py-2 rounded-md text-white font-semibold"><i class="fa-solid fa-clipboard"></i> Update Now</button>
-            </form>
-        {% endif %}
+            
+            {% comment %} Mobile Menu Links {% endcomment %}
+            <div id="mobile_menu_links" class="hidden mt-4 space-y-2">
+                <a href="{% url 'user-profile' %}" class="block px-4 py-2 text-gray-700 hover:bg-gray-100 rounded {% if type == 'view_profile' %}bg-gray-200{% endif %}">
+                    <i class="fas fa-user mr-2"></i>Profile
+                </a>
+                <a href="{% url 'edit-profile' %}" class="block px-4 py-2 text-gray-700 hover:bg-gray-100 rounded {% if type == 'edit_profile' %}bg-gray-200{% endif %}">
+                    <i class="fas fa-edit mr-2"></i>Edit Profile
+                </a>
+                <a href="{% url 'change-password' %}" class="block px-4 py-2 text-gray-700 hover:bg-gray-100 rounded {% if type == 'change_password' %}bg-gray-200{% endif %}">
+                    <i class="fas fa-key mr-2"></i>Change Password
+                </a>
+            </div>
+        </div>
+
+        {% comment %} Desktop Layout {% endcomment %}
+        <div class="flex flex-col md:flex-row">
+            {% comment %} Sidebar - Desktop Only {% endcomment %}
+            <aside class="hidden md:block w-64 bg-white shadow-md fixed h-full">
+                <div class="p-4">
+                    <h2 class="text-xl font-semibold text-gray-800">Menu</h2>
+                </div>
+                <nav class="mt-6">
+                    <a href="{% url 'user-profile' %}" class="block py-3 px-4 {% if type == 'view_profile' %}bg-gray-200{% endif %} text-gray-700 hover:bg-gray-100">
+                        <i class="fas fa-user mr-2"></i>Profile
+                    </a>
+                    <a href="{% url 'edit-profile' %}" class="block py-3 px-4 {% if type == 'edit_profile' %}bg-gray-200{% endif %} text-gray-700 hover:bg-gray-100">
+                        <i class="fas fa-edit mr-2"></i>Edit Profile
+                    </a>
+                    <a href="{% url 'change-password' %}" class="block py-3 px-4 {% if type == 'change_password' %}bg-gray-200{% endif %} text-gray-700 hover:bg-gray-100">
+                        <i class="fas fa-key mr-2"></i>Change Password
+                    </a>
+                </nav>
+            </aside>
+
+            {% comment %} Main Content {% endcomment %}
+            <main class="flex-1 p-4 md:p-8 md:ml-64">
+                {% if type == 'view_profile' %}
+                    {% comment %} Desktop Title {% endcomment %}
+                    <h1 class="hidden md:block text-2xl md:text-3xl font-bold text-gray-800 mb-6">User Profile</h1>
+
+                    <div class="max-w-4xl mx-auto bg-white shadow-md rounded-lg p-4 md:p-6">
+                        <div class="flex flex-col sm:flex-row gap-5 items-center mb-6">
+                            <div class="flex-shrink-0">
+                                <img
+                                {% if profile_img %}
+                                    src="{{profile_img}}"
+                                {% else %}
+                                    src="{% static 'images/avatar.png' %}"
+                                {% endif %}
+                                alt="User avatar"
+                                class="w-16 h-16 md:w-20 md:h-20 rounded-full object-cover"
+                                />
+                            </div>
+                            <div class="text-center sm:text-left">
+                                <h2 class="text-xl md:text-2xl font-semibold text-gray-800">{{name}}</h2>
+                                <p class="text-gray-600">{{role}}</p>
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <h3 class="text-lg font-semibold text-gray-700 mb-2">
+                                    Personal Information
+                                </h3>
+                                <div class="space-y-2">
+                                    <p class="text-gray-600">
+                                        <span class="font-medium">Phone:</span> {{phone}}
+                                    </p>
+                                    <p class="text-gray-600">
+                                        <span class="font-medium">Email:</span> {{email}}
+                                    </p>
+                                    <p class="text-gray-600">
+                                        <span class="font-medium">Username:</span> {{username}}
+                                    </p>
+                                    <p class="text-gray-600">
+                                        <span class="font-medium">Location:</span> New York, USA
+                                    </p>
+                                </div>
+                            </div>
+                            <div>
+                                <h3 class="text-lg font-semibold text-gray-700 mb-2">
+                                    Account Information
+                                </h3>
+                                <div class="space-y-2">
+                                    <p class="text-gray-600">
+                                        <span class="font-medium">Member Since:</span> {{member_since}}
+                                    </p>
+                                    <p class="text-gray-600">
+                                        <span class="font-medium">Last Login:</span> {{last_login}}
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% else %}
+                    {% comment %} Edit Profile/Change Password forms {% endcomment %}
+                    <div class="max-w-2xl mx-auto">
+                        <h1 class="hidden md:block text-2xl md:text-3xl font-bold text-gray-800 mb-6">
+                            {% if type == 'edit_profile' %}Edit Profile{% else %}Change Password{% endif %}
+                        </h1>
+                        
+                        <form method="POST" enctype="multipart/form-data" class="bg-white shadow-md rounded-lg p-4 md:p-6">
+                            {% csrf_token %}
+                            <div class="space-y-4">
+                                {% for field in form %}
+                                    <div class="form-group">
+                                        <label class="block text-gray-700 font-medium mb-1" for="{{ field.id_for_label }}">
+                                            {{ field.label }}
+                                        </label>
+                                        {{ field }}
+                                        {% if field.help_text %}
+                                            <small class="text-gray-500 text-sm">{{ field.help_text }}</small>
+                                        {% endif %}
+                                        {% for error in field.errors %}
+                                            <p class="text-red-500 text-sm mt-1">{{ error }}</p>
+                                        {% endfor %}
+                                    </div>
+                                {% endfor %}
+                            </div>
+                            <button type="submit" class="mt-6 bg-green-600 hover:bg-green-700 px-5 py-2 rounded-md text-white font-semibold transition duration-200">
+                                <i class="fas fa-save mr-2"></i> Update Now
+                            </button>
+                        </form>
+                    </div>
+                {% endif %}
+            </main>
+        </div>
     </div>
+
+    <script>
+        // Toggle mobile menu links below the header
+        document.getElementById('profile_menu_toggle').addEventListener('click', function() {
+            const mobileMenuLinks = document.getElementById('mobile_menu_links');
+            mobileMenuLinks.classList.toggle('hidden');
+        });
+    </script>
 {% endblock content %}

@@ -3,7 +3,7 @@ from event.models import Event, Category
 
 """ Mixins """
 class StyledFormMixin:
-    default_classes = 'border-2 bg-gray-200 rounded-lg p-3 focus:outline-none'
+    default_classes = 'border-2 bg-gray-200 rounded-lg p-3 focus:outline-none mb-3'
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)  # Call the parent's __init__ method
@@ -13,20 +13,20 @@ class StyledFormMixin:
         for field_name, field in self.fields.items():
             if isinstance(field.widget, forms.TimeInput):
                 field.widget.attrs.update({
-                    'class':f'{self.default_classes} mt-3',
+                    'class':f'{self.default_classes}',
                     'placeholder':'HH:MM:SS'
                 })
             elif isinstance(field.widget, forms.CheckboxSelectMultiple):
                 field.widget.attrs.update({
-                    'class': 'max-h-40 overflow-y-auto mb-5'
+                    'class': 'max-h-40 overflow-y-auto'
                 })
             elif isinstance(field.widget, forms.SelectDateWidget):
                 field.widget.attrs.update({
-                    'class': f'bg-gray-200 p-3 mt-3'
+                    'class': f'bg-gray-200 p-2 mb-3'
                 })
             elif isinstance(field.widget, forms.Select):
                 field.widget.attrs.update({
-                    'class':f'{self.default_classes} mt-3 mb-3',
+                    'class':f'{self.default_classes}',
                 })
             elif isinstance(field.widget, forms.TextInput) or isinstance(field.widget, forms.EmailInput) or isinstance(field.widget, forms.PasswordInput):
                 field.widget.attrs.update({
@@ -43,7 +43,7 @@ class EventModelForm(StyledFormMixin, forms.ModelForm):
             'date':forms.SelectDateWidget,
             'time':forms.TimeInput,
             'media': forms.ClearableFileInput(attrs={
-                'class': 'border-2 bg-gray-200 rounded-lg p-3 focus:outline-none w-full',
+                'class': 'border-2 bg-gray-200 rounded-lg p-3 w-full',
                 'accept': 'image/*',  # Only allow image files
             })
         }

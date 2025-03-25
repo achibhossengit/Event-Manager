@@ -31,7 +31,7 @@ def create_group(request):
             group_form.save()
             messages.success(request, "Group Created Successfully!")
             return redirect('dashboard')
-    return render(request, 'create.html', {'group_form':group_form})
+    return render(request, 'create.html', {'form':group_form})
 
 @login_required(login_url='sign-url')
 @permission_required(perm='group.change_group', login_url='no-permission')
@@ -44,7 +44,7 @@ def update_group(request, group_id):
             group_form.save()
             messages.success(request, "Group Updated successfully!")
             return redirect('dashboard')
-    return render(request, 'update.html', {'group_form': group_form})
+    return render(request, 'update.html', {'form': group_form})
 
 @login_required(login_url='group.sign-url')
 @permission_required(perm='delete_group', login_url='no-permission')
